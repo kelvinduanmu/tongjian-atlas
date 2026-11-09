@@ -2,6 +2,10 @@
 
 东晋十六国（304—439）的历史地理阅读与推演工具。提供 **GitHub Pages 个人版** 与 **Python 可信局域网共享版**，不需要自建公网 API 才能使用个人版。
 
+- 项目仓库：https://github.com/kelvinduanmu/tongjian-atlas
+- GitHub Pages 个人版：https://kelvinduanmu.github.io/tongjian-atlas/
+- 首次访问或部署更新时，可在仓库 Actions 页面查看部署状态；个人编辑仅保存在当前浏览器，不会回写仓库。
+
 > **数据不是全部开源/商业可用。** 项目原创代码采用 [MIT](LICENSE)，CHGIS 历史地名保留 **CC BY-NC 4.0 非商业条件**，其他资料各守其许可。详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。疆域是来源支持的手绘区域概略重建，不是精确古界；不得把代码 MIT 扩展到地图资料、扫描、引用站点或用户内容。
 
 ## 两种运行方式
