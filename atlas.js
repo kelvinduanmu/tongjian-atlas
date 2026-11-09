@@ -39,15 +39,24 @@
     return;
   }
   const snapshots = history.snapshots.slice().sort((a, b) => a.year - b.year);
-  if (snapshots.some(snapshot => !Number.isFinite(snapshot.year) || !Array.isArray(snapshot.features)) || snapshots[0].year > 304) {
-    fatal('历史断面资料无效，或缺少304年起始参照。请检查 history-data.js。');
+  const minYear = history.minYear ?? snapshots[0].year;
+  const maxYear = history.maxYear ?? snapshots.at(-1).year;
+  if (snapshots.some(snapshot => !Number.isFinite(snapshot.year) || !Array.isArray(snapshot.features)) || !Number.isInteger(minYear) || !Number.isInteger(maxYear) || minYear > maxYear || snapshots[0].year > minYear) {
+    fatal('历史断面资料无效，或缺少起始年份参照。请检查 history-data.js。');
     return;
   }
   const css = getComputedStyle(document.documentElement);
+  for (const id of ['year-range', 'territory-year']) {
+    $(id).min = minYear; $(id).max = maxYear;
+  }
+  $('year-range').setAttribute('aria-label', `选择公元${minYear}至${maxYear}年`);
+  document.querySelector('.timeline').setAttribute('aria-label', `${minYear}至${maxYear}年时间轴`);
+  $('atlas-year-span').textContent = `${minYear}—${maxYear}`;
+  document.querySelector('.timeline-scale').replaceChildren(...Array.from({ length: 6 }, (_, index) => text('span', Math.round(minYear + (maxYear - minYear) * index / 5))));
   const token = name => css.getPropertyValue(name).trim();
   const polities = new Map(history.polities.map(polity => [polity.id, polity]));
   const review = window.TERRITORY_REVIEW;
-  const reviewPolities = new Map((review?.polities || history.polities).map(polity => [polity.id, polity]));
+  const reviewPolities = new Map([...history.polities, ...(review?.polities || [])].map(polity => [polity.id, polity]));
   const reviewRules = new Map();
   for (const rule of review?.rules || []) {
     if (!Array.isArray(rule.placeIds)) continue;
@@ -69,7 +78,7 @@
   let placeManager = null;
   let politicalFeatures = null;
   const editState = () => window.TerritoryEdits?.getState() || { edits: [], revision: 0 };
-  const eventYears = () => [...new Set([...snapshots.map(item => item.year), ...editState().edits.map(edit => edit.startYear)])].filter(year => year >= 304 && year <= 439).sort((a, b) => a - b);
+  const eventYears = () => [...new Set([...snapshots.map(item => item.year), ...editState().edits.map(edit => edit.startYear)])].filter(year => year >= minYear && year <= maxYear).sort((a, b) => a - b);
   const initialBounds = [[20, 92], [44, 125]];
   const map = L.map('map', { minZoom: 3, maxZoom: 10, zoomSnap: .25, attributionControl: true });
   map.attributionControl.setPrefix(false);
@@ -600,7 +609,7 @@
     });
   }
   function setYear(year) {
-    selectedYear = Math.max(304, Math.min(439, Number(year)));
+    selectedYear = Math.max(minYear, Math.min(maxYear, Number(year)));
     selectedPlace = openPlace && displayEligible(openPlace) ? openPlace : null;
     $('year-range').value = selectedYear; $('selected-year').textContent = selectedYear;
     const next = snapshots.filter(item => item.year <= selectedYear).at(-1);
@@ -679,7 +688,7 @@
       const title = [snapshots.find(item => item.year === year)?.title, editState().edits.some(edit => edit.startYear === year) ? '用户编辑生效' : null].filter(Boolean).join(' · ');
       const option = document.createElement('option'); option.value = year; option.label = title; $('event-years').append(option);
       const button = text('button', ''); button.type = 'button'; button.dataset.year = year;
-      button.style.left = `${(year - 304) / 135 * 100}%`;
+      button.style.left = `${(year - minYear) / Math.max(1, maxYear - minYear) * 100}%`;
       button.title = `${year} · ${title}`; button.setAttribute('aria-label', button.title);
       button.addEventListener('click', () => { stopPlayback(); setYear(year); }); $('event-ticks').append(button);
     });

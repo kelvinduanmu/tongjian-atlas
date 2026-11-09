@@ -31,10 +31,13 @@ def prepare(directory):
     save_assignment(catalog_path, 'MAP_DATA', [{key: row[key] for key in fields if key in row} for row in catalog])
     history_path = directory / 'history-data.js'
     history = load_assignment(history_path, 'HISTORY_DATA')
-    history['disclaimer'] = '疆域为有来源的区域概略重建，非精确县界；仍有未决项。原始核验报告与扫描未随公开版发布，见来源说明。未知不表示无人或无政权，行政隶属不等于实控。'
+    history['disclaimer'] = '疆域为有来源的区域概略重建，非精确县界；304—439年保留原有局部核查，440—589年为另列来源的区域续编，均非逐年实控认证。原始核验报告与扫描未随公开版发布，见来源说明。未知不表示无人或无政权，行政隶属不等于实控。'
     history['publicationNote'] = '保留项目手绘概略重建和来源引用，不分发引用站点的原图、OCR或全文；数据不适用项目代码MIT许可证。'
     for snapshot in history.get('snapshots', []):
-        snapshot['reviewStatus'] = 'partially-crosschecked; original audit omitted from public distribution; see sources.html#audit'
+        if snapshot['year'] <= 439:
+            snapshot['reviewStatus'] = 'partially-crosschecked; original audit omitted from public distribution; see sources.html#audit'
+        else:
+            snapshot['reviewStatus'] = 'regional-outline-only; independently sourced later-period events; original audit omitted; see sources.html#audit'
     save_assignment(history_path, 'HISTORY_DATA', history)
 
 

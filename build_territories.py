@@ -12,6 +12,8 @@ import subprocess
 from shapely.geometry import Point, Polygon, shape, mapping
 from shapely.ops import unary_union
 
+from later_dynasties import append_later_snapshots
+
 
 def assignment(path):
     return json.loads(path.read_text(encoding='utf-8').split('=', 1)[1].strip().rstrip(';'))
@@ -132,12 +134,13 @@ def main():
     history['snapshots'] = output
     history['method'] = document['method']
     history['uncertainties'] = document['remainingLimitations']
-    history['disclaimer'] = '疆域为有来源的区域概略重建，非精确县界；已做全量地点对照但仍有未决项，详见疆域核验报告。未知不表示无人或无政权，行政隶属不等于实控。'
+    append_later_snapshots(history, directory, land)
+    history['disclaimer'] = '疆域为有来源的区域概略重建，非精确县界；304—439年的原地点核验仍有未决项，440—589年仅作分区史料复核，未纳入原全量审计。未知不表示无人或无政权，行政隶属不等于实控。'
     history['geometryProcessing'] = '先合并原始绘图分区，再应用有证据的区域/年代修正，最后按Natural Earth现代陆地裁剪；不是古海岸复原。'
-    history['buildInputs'] = {name: hashlib.sha256((directory / name).read_bytes()).hexdigest() for name in ('history-reconstruction.source.js', 'territory-corrections.json', 'geo-data.js')}
+    history['buildInputs'] = {name: hashlib.sha256((directory / name).read_bytes()).hexdigest() for name in ('history-reconstruction.source.js', 'territory-corrections.json', 'geo-data.js', 'later-dynasties.json', 'later_dynasties.py')}
     target = directory / args.output
     target.write_text('window.HISTORY_DATA = ' + json.dumps(history, ensure_ascii=False, separators=(',', ':')) + ';\n', encoding='utf-8')
-    print(json.dumps({'output': str(target), 'snapshots': len(output), 'features': sum(len(snapshot['features']) for snapshot in output), 'newYears': sorted(events)}, ensure_ascii=False))
+    print(json.dumps({'output': str(target), 'snapshots': len(history['snapshots']), 'features': sum(len(snapshot['features']) for snapshot in history['snapshots']), 'newYears': sorted(set(events) | {snapshot['year'] for snapshot in history['snapshots'] if snapshot['year'] > 439})}, ensure_ascii=False))
 
 
 if __name__ == '__main__':

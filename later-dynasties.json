@@ -1,0 +1,1872 @@
+{
+  "schemaVersion": 1,
+  "baseYear": 439,
+  "minYear": 304,
+  "maxYear": 589,
+  "method": "从已修正439年断面继承覆盖区，以有文献支持的事件分批转移区域；人绘选择掩膜只切分既有面，不将史书转换为精确边界，不向未知区任意扩张。分区交并差后按Natural Earth现代陆地裁剪。",
+  "precision": "所有新增边线均为人绘区域选择掩膜，史料支持事件与大区、不支持这些经纬度；不是精确国界、州县GIS或古海岸复原。断面取事件后概况，不代表全年。",
+  "limitations": [
+    "440—589年只作区域史料复核，未纳入304—439年的原全量地点审计。",
+    "未发生明载变化的区域延续最近断面，仅表示概略连续性，不是每年实控的独立证明。",
+    "河西、北边、山地、飞地及短期占领未逐县复原；留白表示控制未确认，不表示无人或无政权。"
+  ],
+  "sources": {
+    "song98": {
+      "title": "宋书卷98·氐胡：仇池战事",
+      "url": "https://www.shidianguji.com/book/HY2030/chapter/1knxafwhruqeb",
+      "note": "442仇池平并置宋守军；443援军败、退汉中。不能将后续杨氏诸政权等同原仇池山核心永续。"
+    },
+    "wei_west": {
+      "title": "西安市地方志·北魏至北周大事记",
+      "url": "http://xadfz.xa.gov.cn/xadq/xadsj/xzqd/5da985d5f99d6527b6be1772.html",
+      "note": "534孝武帝西迁长安；535西魏立；557北周代西魏。此处不采用页面554“灭南梁”的过宽表述。"
+    },
+    "ncm_ye": {
+      "title": "中国国家博物馆·和合共生——临漳邺城佛造像展",
+      "url": "https://www.chnmuseum.cn/portals/0/web/zt/20190806hhgs/",
+      "note": "534东魏迁都邺，550北齐代东魏，577北周灭北齐。太原/晋阳属东部体系，不能随关中归西魏。"
+    },
+    "sui_annals": {
+      "title": "西安市地方志·隋朝大事记",
+      "url": "http://xadfz.xa.gov.cn/xadq/xadsj/xzqd/5da985d6f99d6527b6be1776.html",
+      "note": "581建隋，589正月灭陈；灭陈不等于征服突厥、吐谷浑等周边政权。"
+    },
+    "tongjian165": {
+      "title": "资治通鉴卷165·梁纪二十一",
+      "url": "https://zizhitongjian.5000yan.com/54450.html",
+      "note": "553八月成都降魏；554巴州、白帝及十一月江陵陷落；萧詧得江陵附近地，魏取雍州。江陵东西城分驻，不能给西梁全荆州或襄阳。"
+    },
+    "qiuchi443": {
+      "title": "通鉴纪事本末·魏平仇池",
+      "url": "https://www.shidianguji.com/book/SBCK036/chapter/1j7424m3rxoaf_129",
+      "note": "443二月魏遂取仇池，五月置仇池镇将；杨文德另屯葭芦，不能据此把全陇南或后继杨氏政权一并涂魏。"
+    },
+    "southern_succession": {
+      "title": "岳阳市地方志·南朝时期",
+      "url": "http://yysqw.gov.cn/43338/43339/44574/content_1269392.html",
+      "note": "479萧道成代宋，502萧衍建梁，557陈代梁；地方隶属纪年支持朝代转换，不能证明全梁疆土归陈。"
+    },
+    "chen573": {
+      "title": "陈书·宣帝纪上（太建五至七年）",
+      "url": "http://xuoda.com/ls/chenshu/015.htm",
+      "note": "573十月克寿阳、十一月淮阴降；574正月广陵金城降；575二月克下邳。三个节点不能提前合并成573年一举取得所有区域。"
+    },
+    "chen579": {
+      "title": "陈书·宣帝纪下（太建十至十一年）",
+      "url": "http://xuoda.com/ls/chenshu/016.htm",
+      "note": "578吕梁战败；579十一月寿阳陷，十二月自是淮南之地尽没于周。"
+    },
+    "liang_chen_study": {
+      "title": "李磊：梁陈之际至隋统一时期的东亚政治格局（河南大学转载《江海学刊》2023年第1期）",
+      "url": "https://sxyk.henu.edu.cn/info/1014/3644.htm",
+      "note": "侯景乱中南朝失巴蜀、江陵及淮南；552收复建康；558王琳在郢州立萧庄，560陈取郢州并稳定中游；577后营州高保宁仍抵抗周，不能把辽东一并涂周或隋。"
+    },
+    "tongjian162": {
+      "title": "资治通鉴卷162·梁纪十八",
+      "url": "https://zizhitongjian.5000yan.com/54447.html",
+      "note": "549正月王显贵以寿阳降东魏，二月东魏已得寿阳钟离，三月台城陷、东魏据淮阴，七月合州输东魏；侯景取得广陵，其号令仅吴郡以西、南陵以北。"
+    },
+    "tongjian164": {
+      "title": "资治通鉴卷164·梁纪二十",
+      "url": "https://zizhitongjian.5000yan.com/54449.html",
+      "note": "552五月萧循在南郑降西魏，于是剑北皆入于魏；551只是出兵，不提前把成都或巴州白帝同时划入。 同年三月建康收复；陈霸先趋广陵时，北齐辛术已据广陵。侯景551十一月才称汉帝，549不提前标汉国号。"
+    },
+    "tongjian176": {
+      "title": "资治通鉴卷176·陈纪十",
+      "url": "https://zizhitongjian.5000yan.com/54461.html",
+      "note": "587开皇七年废江陵梁国，西梁不应延续到589。"
+    },
+    "tongjian132": {
+      "title": "资治通鉴卷132·宋纪十四",
+      "url": "https://www.quanxue.cn/ls_zhengshi/zztj/zztj132.html",
+      "note": "467失淮北四州及豫州淮西地，八月下邳宿豫弃城；468历城、梁邹降魏；469正月东阳陷，青冀尽入魏。不能把所有北失都压到469。"
+    },
+    "lingnan589": {
+      "title": "隋书·列女传·谯国夫人",
+      "url": "https://www.shidianguji.com/book/HY2504/chapter/1mbcan5bk1hrz",
+      "note": "陈国亡，岭南未有所附，数郡共奉夫人；其后迎韦洸入广州。589断面不以建康陷落自动证明岭南同日实控。"
+    },
+    "tongjian_qi9": {
+      "title": "资治通鉴·齐纪九（永元二年）",
+      "url": "https://zizhitongjian.5000yan.com/54428.html",
+      "note": "500正月裴叔业遣使降魏，二月纳魏兵入寿阳，三月魏取合肥，八月淮南入魏；不据概括句吞并广陵、淮阴。"
+    },
+    "luoyang494": {
+      "title": "资治通鉴·齐纪五（494年迁都实施）",
+      "url": "https://zizhitongjian.5000yan.com/54424.html",
+      "note": "493年决定迁都，494年实施迁洛；十月奉迁神主于洛阳。此为都城迁移证据，不是疆域扩张证据。"
+    },
+    "tongjian151": {
+      "title": "资治通鉴卷151·梁纪七",
+      "url": "https://zizhitongjian.5000yan.com/54436.html",
+      "note": "普通七年526冬十一月李宪以寿阳降，陈庆之入城，复以寿阳为豫州、合肥为南豫州；事件在526，不误系527。"
+    }
+  },
+  "masks": {
+    "jiaozhou-core": {
+      "title": "jiaozhou-core（原修正区域选择）",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "仅沿用既有区域选择范围，后续归属另按本文件事件和来源；不是该年精确辖境。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.0,
+              22.4
+            ],
+            [
+              107.5,
+              21.6
+            ],
+            [
+              107.8,
+              21.2
+            ],
+            [
+              106.8,
+              20.8
+            ],
+            [
+              106.2,
+              19.9
+            ],
+            [
+              105.9,
+              19.3
+            ],
+            [
+              104.9,
+              19.3
+            ],
+            [
+              104.5,
+              20.4
+            ],
+            [
+              104.4,
+              21.3
+            ],
+            [
+              105.0,
+              22.4
+            ],
+            [
+              106.0,
+              22.4
+            ]
+          ]
+        ]
+      }
+    },
+    "ningzhou-core": {
+      "title": "ningzhou-core（原修正区域选择）",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "仅沿用既有区域选择范围，后续归属另按本文件事件和来源；不是该年精确辖境。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              101.5,
+              23.5
+            ],
+            [
+              100.2,
+              24.5
+            ],
+            [
+              100.2,
+              26.2
+            ],
+            [
+              101.5,
+              27.3
+            ],
+            [
+              102.6,
+              28.0
+            ],
+            [
+              104.0,
+              28.0
+            ],
+            [
+              105.2,
+              26.8
+            ],
+            [
+              105.2,
+              25.8
+            ],
+            [
+              103.9,
+              25.2
+            ],
+            [
+              103.72277227722772,
+              24.136633663366332
+            ],
+            [
+              104.0,
+              23.8
+            ],
+            [
+              103.2,
+              22.8
+            ],
+            [
+              101.5,
+              23.5
+            ]
+          ]
+        ]
+      }
+    },
+    "xinggu-region": {
+      "title": "xinggu-region（原修正区域选择）",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "仅沿用既有区域选择范围，后续归属另按本文件事件和来源；不是该年精确辖境。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              105.2,
+              25.0
+            ],
+            [
+              104.0,
+              23.8
+            ],
+            [
+              103.72277227722772,
+              24.136633663366332
+            ],
+            [
+              103.9,
+              25.2
+            ],
+            [
+              105.2,
+              25.8
+            ],
+            [
+              105.2,
+              25.0
+            ]
+          ]
+        ]
+      }
+    },
+    "qiuchi-mountain-core": {
+      "title": "qiuchi-mountain-core（原修正区域选择）",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "仅沿用既有区域选择范围，后续归属另按本文件事件和来源；不是该年精确辖境。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              105.08,
+              33.6
+            ],
+            [
+              105.06,
+              33.87
+            ],
+            [
+              105.26,
+              34.03
+            ],
+            [
+              105.5,
+              34.0
+            ],
+            [
+              105.61,
+              33.81
+            ],
+            [
+              105.52,
+              33.59
+            ],
+            [
+              105.29,
+              33.49
+            ],
+            [
+              105.08,
+              33.6
+            ]
+          ]
+        ]
+      }
+    },
+    "qingqi-huaibei": {
+      "title": "青齐—淮北",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "469年青齐与此前淮北丧失的综合区域断面；南缘概略沿淮北方向，淮阴南岸与广陵仍留南朝，不作精确河道。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              114.8,
+              33.15
+            ],
+            [
+              116.2,
+              33.15
+            ],
+            [
+              117.4,
+              33.35
+            ],
+            [
+              118.6,
+              33.65
+            ],
+            [
+              119.3,
+              34.1
+            ],
+            [
+              121.3,
+              34
+            ],
+            [
+              124,
+              36
+            ],
+            [
+              124,
+              39
+            ],
+            [
+              115,
+              39
+            ],
+            [
+              114.8,
+              33.15
+            ]
+          ]
+        ]
+      }
+    },
+    "eastern-wei-core": {
+      "title": "河北—山东—山西东部选择",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "西界为关陇与河北、山西东部的概略分割；包括邺和晋阳，不把534东魏立国提前称西魏已经建立。河东争夺未逐县绘制。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              110.8,
+              28
+            ],
+            [
+              128,
+              28
+            ],
+            [
+              128,
+              44
+            ],
+            [
+              110.8,
+              44
+            ],
+            [
+              110.8,
+              39
+            ],
+            [
+              110.4,
+              37.4
+            ],
+            [
+              111.2,
+              35.5
+            ],
+            [
+              110.8,
+              34.5
+            ],
+            [
+              110.8,
+              28
+            ]
+          ]
+        ]
+      }
+    },
+    "north-frontier-unconfirmed": {
+      "title": "六镇以北未确认边带",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "魏末北边形势不能从439永久继承；仅省略既有图最北部，非对柔然/突厥疆界的复原。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              104,
+              40.2
+            ],
+            [
+              116,
+              40.2
+            ],
+            [
+              116,
+              45
+            ],
+            [
+              104,
+              45
+            ],
+            [
+              104,
+              40.2
+            ]
+          ]
+        ]
+      }
+    },
+    "hehuang-unconfirmed": {
+      "title": "河湟西部未确认边带",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "魏末至隋初河湟与吐谷浑边缘不据河西继承关系自动归中原；只省略未复核部分，不给吐谷浑画精确面。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              98,
+              33.5
+            ],
+            [
+              102.9,
+              33.5
+            ],
+            [
+              103.2,
+              36.8
+            ],
+            [
+              102.9,
+              37.4
+            ],
+            [
+              99,
+              37.4
+            ],
+            [
+              98,
+              33.5
+            ]
+          ]
+        ]
+      }
+    },
+    "shu-hanzhong": {
+      "title": "汉中—巴蜀",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "用于553成都、554巴州白帝等分阶段失地；北界汉中山地和东缘峡江均为选择范围，不是西魏全境测绘。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              102,
+              27.8
+            ],
+            [
+              104,
+              27.8
+            ],
+            [
+              106,
+              28.5
+            ],
+            [
+              108,
+              29.4
+            ],
+            [
+              110,
+              30.5
+            ],
+            [
+              110,
+              32.7
+            ],
+            [
+              109,
+              33.7
+            ],
+            [
+              105,
+              34.1
+            ],
+            [
+              102,
+              32
+            ],
+            [
+              102,
+              27.8
+            ]
+          ]
+        ]
+      }
+    },
+    "shu-chengdu": {
+      "title": "成都与蜀地西部",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "553成都降魏，仅先选择成都盆地及西部；巴州、白帝方向下一断面处理。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              102,
+              27.8
+            ],
+            [
+              104,
+              27.8
+            ],
+            [
+              106.3,
+              29
+            ],
+            [
+              106.3,
+              32.6
+            ],
+            [
+              105.3,
+              33.8
+            ],
+            [
+              102,
+              32
+            ],
+            [
+              102,
+              27.8
+            ]
+          ]
+        ]
+      }
+    },
+    "xiangyang": {
+      "title": "襄阳—汉水北岸走廊",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "554魏取萧詧雍州地的区域示意，含襄阳；不将它误分给江陵西梁。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.5,
+              31.8
+            ],
+            [
+              111,
+              31.45
+            ],
+            [
+              113,
+              31.6
+            ],
+            [
+              114.7,
+              32.1
+            ],
+            [
+              114.7,
+              33.6
+            ],
+            [
+              110,
+              33.8
+            ],
+            [
+              109.5,
+              31.8
+            ]
+          ]
+        ]
+      }
+    },
+    "jiangling": {
+      "title": "江陵附近小区",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "围绕江陵的区域选择，约百余公里量级；史书延袤三百里不能机械换算为国界，魏驻军与萧詧辖区亦不逐城切分。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              111.8,
+              30.05
+            ],
+            [
+              112.5,
+              30.05
+            ],
+            [
+              112.75,
+              30.45
+            ],
+            [
+              112.5,
+              30.8
+            ],
+            [
+              111.85,
+              30.8
+            ],
+            [
+              111.6,
+              30.45
+            ],
+            [
+              111.8,
+              30.05
+            ]
+          ]
+        ]
+      }
+    },
+    "huainan": {
+      "title": "淮南—江北走廊",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "寿阳、合肥至淮阴、广陵方向的区域选择；南缘沿江北走廊概略折转，保留建康—京口及下游江南岸，不以横直线穿过南岸城市。不是精确古河道，不宣称沿江全部据点同日转属。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              114.7,
+              32.1
+            ],
+            [
+              116,
+              31.65
+            ],
+            [
+              117.3,
+              31.65
+            ],
+            [
+              118.6,
+              32.15
+            ],
+            [
+              119,
+              32.25
+            ],
+            [
+              119.45,
+              32.32
+            ],
+            [
+              119.8,
+              32.25
+            ],
+            [
+              120.4,
+              32.1
+            ],
+            [
+              121.2,
+              31.95
+            ],
+            [
+              121.2,
+              33.8
+            ],
+            [
+              119.3,
+              33.8
+            ],
+            [
+              117.4,
+              33.8
+            ],
+            [
+              116.2,
+              33.5
+            ],
+            [
+              114.7,
+              33.3
+            ],
+            [
+              114.7,
+              32.1
+            ]
+          ]
+        ]
+      }
+    },
+    "middle-yangtze": {
+      "title": "江夏—湘州的梁残余概略区",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "王琳拥梁与陈对峙的大区选择；不等于全部湖湘均由王琳稳定实控，557—560年的复杂格局另在说明中保留。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              110.3,
+              27
+            ],
+            [
+              114.5,
+              27
+            ],
+            [
+              116.1,
+              29.2
+            ],
+            [
+              116.1,
+              31.4
+            ],
+            [
+              114.2,
+              32
+            ],
+            [
+              112,
+              31.5
+            ],
+            [
+              110.3,
+              30.5
+            ],
+            [
+              110.3,
+              27
+            ]
+          ]
+        ]
+      }
+    },
+    "huainan-west": {
+      "title": "寿阳—淮阴",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "573所取寿阳、淮阴方向；南缘与江北走廊一致，保留建康—京口南岸，不将广陵在574归降提前到573。边线仅为年度事件的概略区域选择，非古河道。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              114.7,
+              32.1
+            ],
+            [
+              116,
+              31.65
+            ],
+            [
+              117.3,
+              31.65
+            ],
+            [
+              118.6,
+              32.15
+            ],
+            [
+              119.15,
+              32.35
+            ],
+            [
+              119.15,
+              33.8
+            ],
+            [
+              117.4,
+              33.8
+            ],
+            [
+              116.2,
+              33.5
+            ],
+            [
+              114.7,
+              33.3
+            ],
+            [
+              114.7,
+              32.1
+            ]
+          ]
+        ]
+      }
+    },
+    "xiapi": {
+      "title": "下邳进兵小区",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "575年下邳周边概略进兵区，不表示取得整个徐州或彭城。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              117.7,
+              33.75
+            ],
+            [
+              118.3,
+              33.75
+            ],
+            [
+              118.5,
+              34.1
+            ],
+            [
+              118.2,
+              34.5
+            ],
+            [
+              117.7,
+              34.35
+            ],
+            [
+              117.7,
+              33.75
+            ]
+          ]
+        ]
+      }
+    },
+    "liaoxi-unconfirmed": {
+      "title": "营州—辽西北齐残余未确认带",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "577高保宁等在营州延续抵抗，不能随北齐主要地域直接归周；此处保留空白，不画高句丽或突厥疆界。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              119.3,
+              40.2
+            ],
+            [
+              124,
+              40.2
+            ],
+            [
+              124,
+              44
+            ],
+            [
+              119.3,
+              44
+            ],
+            [
+              119.3,
+              40.2
+            ]
+          ]
+        ]
+      }
+    },
+    "jiankang-houjing": {
+      "title": "建康—吴郡与广陵的侯景核心示意",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "549所述吴郡以西、南陵以北的区域选择，并含广陵；不是侯景全部军事进兵或名义声索。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              117.8,
+              30.3
+            ],
+            [
+              119,
+              29.8
+            ],
+            [
+              120.5,
+              30
+            ],
+            [
+              122,
+              31
+            ],
+            [
+              122,
+              32.2
+            ],
+            [
+              121.2,
+              32.7
+            ],
+            [
+              119.2,
+              32.7
+            ],
+            [
+              118.7,
+              32.2
+            ],
+            [
+              117.8,
+              31.5
+            ],
+            [
+              117.8,
+              30.3
+            ]
+          ]
+        ]
+      }
+    },
+    "hanzhong": {
+      "title": "汉中—剑阁以北",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "552南郑降魏、剑北入魏的区域选择；包括汉中与剑阁以北走廊，不提前包含成都。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              104.6,
+              32.3
+            ],
+            [
+              105.5,
+              31.9
+            ],
+            [
+              106.2,
+              32
+            ],
+            [
+              108.5,
+              32.45
+            ],
+            [
+              109.5,
+              33.3
+            ],
+            [
+              108.5,
+              33.8
+            ],
+            [
+              105.4,
+              33.8
+            ],
+            [
+              104.6,
+              32.3
+            ]
+          ]
+        ]
+      }
+    },
+    "huaibei467": {
+      "title": "淮北与淮西北部",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "467淮北四州及淮西失地的选择，含下邳宿豫方向；未把青齐北部随之提前涂魏。南界非精确淮河线。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              114.8,
+              33.15
+            ],
+            [
+              116.2,
+              33.15
+            ],
+            [
+              117.4,
+              33.35
+            ],
+            [
+              118.6,
+              33.65
+            ],
+            [
+              119.3,
+              34.1
+            ],
+            [
+              121.3,
+              34
+            ],
+            [
+              122,
+              35.15
+            ],
+            [
+              115,
+              35.15
+            ],
+            [
+              114.8,
+              33.15
+            ]
+          ]
+        ]
+      }
+    },
+    "licheng468": {
+      "title": "历城—梁邹方向",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "468历城、梁邹降魏的区域示意；东阳/青州核心留至469，非两郡实际辖界。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              116.3,
+              36.2
+            ],
+            [
+              117.5,
+              36.2
+            ],
+            [
+              118.1,
+              36.9
+            ],
+            [
+              117.9,
+              37.5
+            ],
+            [
+              116.6,
+              37.5
+            ],
+            [
+              116.3,
+              36.8
+            ],
+            [
+              116.3,
+              36.2
+            ]
+          ]
+        ]
+      }
+    },
+    "lingnan-unconfirmed": {
+      "title": "岭南归附过程未确认带",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "589建康陈亡不代表岭南同步接收；选取原图岭南大区留白，待归附过程另核，不主张此线是岭南精确行政边界。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              104,
+              19
+            ],
+            [
+              117.5,
+              19
+            ],
+            [
+              117.5,
+              24
+            ],
+            [
+              116.2,
+              25.1
+            ],
+            [
+              113.2,
+              25.3
+            ],
+            [
+              110,
+              25.1
+            ],
+            [
+              107,
+              24.8
+            ],
+            [
+              104,
+              24.5
+            ],
+            [
+              104,
+              19
+            ]
+          ]
+        ]
+      }
+    },
+    "shouyang-hefei": {
+      "title": "寿阳—合肥核心",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "500魏取寿阳合肥、526复梁的有限选择；不把淮阴、广陵及全部江北一并划入。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              115.8,
+              31.5
+            ],
+            [
+              117.7,
+              31.5
+            ],
+            [
+              118,
+              32.4
+            ],
+            [
+              117.4,
+              33
+            ],
+            [
+              116,
+              33
+            ],
+            [
+              115.8,
+              31.5
+            ]
+          ]
+        ]
+      }
+    },
+    "shouyang": {
+      "title": "寿阳附近",
+      "precision": "human regional selection mask; not an attested exact boundary",
+      "note": "548侯景起兵据寿阳的核心示意；合肥鄱阳王势力并未因此一并归侯景。",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              116.2,
+              32.3
+            ],
+            [
+              116.9,
+              32.3
+            ],
+            [
+              117.1,
+              32.7
+            ],
+            [
+              116.9,
+              33
+            ],
+            [
+              116.2,
+              33
+            ],
+            [
+              116.2,
+              32.3
+            ]
+          ]
+        ]
+      }
+    }
+  },
+  "events": [
+    {
+      "year": 442,
+      "title": "宋军平仇池，原杨氏核心结束",
+      "description": "宋军平仇池并置守军；仅转移原图仇池山核心，不把杨氏后续各地势力一并判亡。",
+      "sources": [
+        "song98"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "qiuchi"
+          ],
+          "to": "liu-song",
+          "note": "宋军平仇池并置胡崇之守，只处理仇池山既有核心。"
+        }
+      ]
+    },
+    {
+      "year": 443,
+      "title": "北魏取得仇池山核心",
+      "description": "宋援军败于浊水，魏遂取仇池并置镇将；杨文德另屯葭芦，不能据此全取陇南。",
+      "sources": [
+        "qiuchi443"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liu-song"
+          ],
+          "to": "northern-wei",
+          "note": "魏取仇池并置镇将，后继杨氏其他据点未绘。",
+          "mask": "qiuchi-mountain-core"
+        }
+      ]
+    },
+    {
+      "year": 467,
+      "title": "宋失淮北与淮西主要地域",
+      "description": "刘宋内乱后张永败，失淮北四州及豫州淮西之地，下邳、宿豫守军弃城；青齐北部尚未全部归魏。",
+      "sources": [
+        "tongjian132"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liu-song"
+          ],
+          "to": "northern-wei",
+          "note": "467淮北、淮西主要失地，青齐北部另在468—469分步处理。",
+          "mask": "huaibei467"
+        }
+      ]
+    },
+    {
+      "year": 468,
+      "title": "历城、梁邹降北魏",
+      "description": "北魏取得历城、梁邹方向，青州东阳尚未陷落；不把469结果提前完整绘入。",
+      "sources": [
+        "tongjian132"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liu-song"
+          ],
+          "to": "northern-wei",
+          "note": "468历城、梁邹降魏，只转青齐西部概略区。",
+          "mask": "licheng468"
+        }
+      ]
+    },
+    {
+      "year": 469,
+      "title": "东阳陷，青冀主要地域入魏",
+      "description": "北魏拔东阳，青冀之地尽入魏；本断面完成467年以来北方失地序列，淮阴南岸与广陵仍留南朝。",
+      "sources": [
+        "tongjian132"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liu-song"
+          ],
+          "to": "northern-wei",
+          "note": "469东阳陷后补齐青齐主要区域；467淮北失地已另列。",
+          "mask": "qingqi-huaibei"
+        }
+      ]
+    },
+    {
+      "year": 479,
+      "title": "南齐代宋",
+      "description": "萧道成代宋建齐；沿用此前已扣除青齐、淮北失地的南方区域，不把刘宋初期疆域倒填。",
+      "sources": [
+        "southern_succession"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liu-song"
+          ],
+          "to": "southern-qi",
+          "note": "南齐代宋，仅继承此时仍绘为宋的区域。"
+        }
+      ]
+    },
+    {
+      "year": 494,
+      "title": "北魏迁都洛阳",
+      "description": "北魏孝文帝在493年决定迁都后，于494年实施迁洛，十月奉迁神主于洛阳。本节点专门表示都城迁移，疆域沿用上一事件断面，不表示494年新取得洛阳或发生拓疆。",
+      "sources": ["luoyang494"],
+      "reviewScope": "仅复核迁都实施年代；本年无新增疆域转移断言，沿用前一断面的区域证据。",
+      "actions": []
+    },
+    {
+      "year": 500,
+      "title": "寿阳、合肥归北魏",
+      "description": "裴叔业降魏，北魏进入寿阳并攻取合肥；只转寿阳—合肥核心，广陵、淮阴不随概括的淮南失地全部涂魏。",
+      "sources": [
+        "tongjian_qi9"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "southern-qi"
+          ],
+          "to": "northern-wei",
+          "note": "500寿阳、合肥入北魏，有限核心与东部淮南分开。",
+          "mask": "shouyang-hefei"
+        }
+      ]
+    },
+    {
+      "year": 502,
+      "title": "梁代南齐",
+      "description": "萧衍代齐建梁；本断面保留前期北方失地，边境城镇反复仍须逐项复核。 宁州、兴古、交州远缘后期证据不足，自本断面省略，并非断言它们在502年脱离。",
+      "sources": [
+        "southern_succession"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "southern-qi"
+          ],
+          "to": null,
+          "note": "宁州远缘未获梁陈时期独立实控复核，自本断面留白；不称502发生确定割让。",
+          "mask": "ningzhou-core"
+        },
+        {
+          "from": [
+            "southern-qi"
+          ],
+          "to": null,
+          "note": "兴古远缘后续实控未确认，停止自动继承。",
+          "mask": "xinggu-region"
+        },
+        {
+          "from": [
+            "southern-qi"
+          ],
+          "to": null,
+          "note": "交州后续实控未独立复核，停止自动继承；不把隋灭陈等同已占交州。",
+          "mask": "jiaozhou-core"
+        },
+        {
+          "from": [
+            "southern-qi"
+          ],
+          "to": "liang",
+          "note": "梁代南齐，政权接续不是恢复已失北方疆土。"
+        }
+      ],
+      "limitations": [
+        "502年起宁州、兴古、交州原补绘远缘因后期实控未独立确认而省略；这是证据覆盖限制，不是断言502年发生割让或独立。"
+      ]
+    },
+    {
+      "year": 526,
+      "title": "寿阳、合肥复归梁",
+      "description": "李宪以寿阳降梁，陈庆之入城，梁复置寿阳豫州并以合肥为南豫州；这是526年冬，不误标527。",
+      "sources": [
+        "tongjian151"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "northern-wei"
+          ],
+          "to": "liang",
+          "note": "526寿阳合肥核心归梁，后续侯景乱再分裂。",
+          "mask": "shouyang-hefei"
+        }
+      ]
+    },
+    {
+      "year": 534,
+      "title": "北魏分裂：东魏与西迁朝廷",
+      "description": "东魏迁邺；孝武帝西迁长安，西部本年仍标北魏，不提前使用535年西魏国号。晋阳留在东部体系。",
+      "sources": [
+        "wei_west",
+        "ncm_ye"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "northern-wei"
+          ],
+          "to": null,
+          "note": "魏末北边未复核带停止继承439年控制判断。",
+          "mask": "north-frontier-unconfirmed"
+        },
+        {
+          "from": [
+            "northern-wei"
+          ],
+          "to": null,
+          "note": "河湟西部与吐谷浑边缘归属未复核，留白而不随河西自动继承。",
+          "mask": "hehuang-unconfirmed"
+        },
+        {
+          "from": [
+            "northern-wei"
+          ],
+          "to": "eastern-wei",
+          "note": "邺、河北与晋阳方向划入东魏；河东西南边线概略。",
+          "mask": "eastern-wei-core"
+        }
+      ],
+      "limitations": [
+        "534年起北边六镇外围、河湟西部停止沿用439年判断；未给柔然、突厥、吐谷浑精确边界。"
+      ]
+    },
+    {
+      "year": 535,
+      "title": "西魏建立，东西魏对峙",
+      "description": "元宝炬在长安立，西部北魏朝廷改称西魏；东部仍为东魏。关陇与河东战线不是精确黄河界。",
+      "sources": [
+        "wei_west",
+        "ncm_ye"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "northern-wei"
+          ],
+          "to": "western-wei",
+          "note": "535西魏建立，仅接续已划出东魏与未知边区后的西部面。"
+        }
+      ]
+    },
+    {
+      "year": 548,
+      "title": "侯景起兵，寿阳控制分裂",
+      "description": "侯景之乱起，先单列其寿阳核心；建康在围攻中，至549台城陷落才转色。合肥仍另属梁军，不整个交给侯景。",
+      "sources": [
+        "liang_chen_study",
+        "tongjian162"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liang"
+          ],
+          "to": "hou-jing",
+          "note": "侯景起兵的寿阳核心；以势力名标示，551以前不称汉帝国。",
+          "mask": "shouyang"
+        }
+      ]
+    },
+    {
+      "year": 549,
+      "title": "侯景陷建康，东魏取淮南西部",
+      "description": "台城陷落，侯景控制建康下游核心并取得广陵；东魏得寿阳、钟离、淮阴及合州，不能把淮南全部同日涂东魏。",
+      "sources": [
+        "tongjian162"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liang",
+            "hou-jing"
+          ],
+          "to": "eastern-wei",
+          "note": "549寿阳、钟离、淮阴与合州入东魏，广陵不在此片。",
+          "mask": "huainan-west"
+        },
+        {
+          "from": [
+            "liang"
+          ],
+          "to": "hou-jing",
+          "note": "侯景陷建康并据下游核心、广陵；不表示梁的全部地域均归侯景。",
+          "mask": "jiankang-houjing"
+        }
+      ]
+    },
+    {
+      "year": 550,
+      "title": "北齐代东魏",
+      "description": "高洋代东魏建北齐，都邺；与西魏并立。南方在侯景乱中分裂，不把建康继续画为正常梁朝控制。",
+      "sources": [
+        "ncm_ye",
+        "liang_chen_study"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "eastern-wei"
+          ],
+          "to": "northern-qi",
+          "note": "北齐接续东魏当时所绘区域。"
+        }
+      ]
+    },
+    {
+      "year": 552,
+      "title": "梁收复建康，北齐据广陵，西魏取汉中",
+      "description": "侯景败亡，梁收复建康；北齐辛术已据广陵，不能将侯景全部旧地归梁。五月南郑降西魏，剑阁以北入魏，成都尚未归魏。",
+      "sources": [
+        "tongjian164",
+        "liang_chen_study"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "hou-jing",
+            "liang"
+          ],
+          "to": "northern-qi",
+          "note": "552北齐据广陵，将淮南东段另转齐，不随建康复梁。",
+          "mask": "huainan"
+        },
+        {
+          "from": [
+            "hou-jing"
+          ],
+          "to": "liang",
+          "note": "552收复建康与下游核心，侯景势力结束。"
+        },
+        {
+          "from": [
+            "liang"
+          ],
+          "to": "western-wei",
+          "note": "552南郑降、剑北入魏；成都留待553。",
+          "mask": "hanzhong"
+        }
+      ]
+    },
+    {
+      "year": 553,
+      "title": "西魏取成都",
+      "description": "成都降西魏，巴蜀失地分阶段表达；巴州、白帝方向不在本断面提前全部改色。",
+      "sources": [
+        "tongjian165"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liang"
+          ],
+          "to": "western-wei",
+          "note": "553八月成都降魏，先转成都盆地及蜀西概略区。",
+          "mask": "shu-chengdu"
+        }
+      ]
+    },
+    {
+      "year": 554,
+      "title": "梁失巴州、白帝与江陵",
+      "description": "西魏进取巴州、白帝，十一月江陵陷落，梁元帝被杀；襄阳方向与江陵小区分开处理，梁在东南并未因此全部灭亡。",
+      "sources": [
+        "tongjian165"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liang"
+          ],
+          "to": "western-wei",
+          "note": "554巴州、白帝方向失守，转移巴蜀其余绘图区。",
+          "mask": "shu-hanzhong"
+        },
+        {
+          "from": [
+            "liang"
+          ],
+          "to": "western-wei",
+          "note": "西魏取萧詧雍州地，襄阳不属后来江陵西梁。",
+          "mask": "xiangyang"
+        },
+        {
+          "from": [
+            "liang"
+          ],
+          "to": "western-wei",
+          "note": "554江陵陷，先表示魏军占领；555另标萧詧政权。",
+          "mask": "jiangling"
+        }
+      ]
+    },
+    {
+      "year": 555,
+      "title": "江陵西梁建立，南方继续分裂",
+      "description": "萧詧为梁主，居江陵东城，魏军驻西城；只给江陵附近小区西梁色，不将巴蜀、襄阳或全荆州一并划入。",
+      "sources": [
+        "tongjian165",
+        "liang_chen_study"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "western-wei"
+          ],
+          "to": "western-liang-jingling",
+          "note": "江陵附近依附西魏的萧詧西梁，与十六国后凉完全不同。",
+          "mask": "jiangling"
+        }
+      ]
+    },
+    {
+      "year": 557,
+      "title": "陈、北周建立，梁残余仍据中游",
+      "description": "北周代西魏；陈霸先代建康梁廷。巴蜀、襄阳、西梁与淮南失地已剔除；王琳等拥梁的中游势力不随建康禅代自动归陈。",
+      "sources": [
+        "wei_west",
+        "southern_succession",
+        "liang_chen_study"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "western-wei"
+          ],
+          "to": "northern-zhou",
+          "note": "北周代西魏，保持已分出的江陵西梁。"
+        },
+        {
+          "from": [
+            "liang"
+          ],
+          "to": "chen",
+          "note": "建康梁廷由陈接续；随后将中游拥梁区分出。"
+        },
+        {
+          "from": [
+            "chen"
+          ],
+          "to": "liang",
+          "note": "王琳等在长江中游拥梁，557不作陈已统一南方；558立萧庄。",
+          "mask": "middle-yangtze"
+        }
+      ]
+    },
+    {
+      "year": 560,
+      "title": "陈败王琳，取得郢州与中游主要区域",
+      "description": "陈击败王琳与北齐联军，取得郢州等地并稳定中游；江陵西梁仍独立标示，不能借此吞并。",
+      "sources": [
+        "liang_chen_study"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "liang"
+          ],
+          "to": "chen",
+          "note": "560陈取郢州等地，结束图示王琳拥梁中游区。"
+        }
+      ]
+    },
+    {
+      "year": 573,
+      "title": "陈北伐取寿阳、淮阴",
+      "description": "吴明彻北伐，十月克寿阳、十一月淮阴降；广陵在574年，不能提前归陈。",
+      "sources": [
+        "chen573"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "northern-qi"
+          ],
+          "to": "chen",
+          "note": "573取得寿阳至淮阴方向，广陵待574单列。",
+          "mask": "huainan-west"
+        }
+      ]
+    },
+    {
+      "year": 574,
+      "title": "广陵金城降陈",
+      "description": "陈书记正月广陵金城降；补入淮南东段，不能将此年战果提前到573年。",
+      "sources": [
+        "chen573"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "northern-qi"
+          ],
+          "to": "chen",
+          "note": "574广陵金城降，补入淮南东段概略区。",
+          "mask": "huainan"
+        }
+      ]
+    },
+    {
+      "year": 575,
+      "title": "陈军克下邳",
+      "description": "陈军取得下邳，绘小范围北向进兵区；未将整个徐州或彭城画为陈稳固辖境。",
+      "sources": [
+        "chen573"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "northern-qi"
+          ],
+          "to": "chen",
+          "note": "575克下邳，仅画下邳附近小区。",
+          "mask": "xiapi"
+        }
+      ]
+    },
+    {
+      "year": 577,
+      "title": "北周灭北齐，陈仍据淮南",
+      "description": "北周取得北齐主要地域；陈在淮南的战果不随灭齐转周。营州高保宁仍抵抗，辽西边缘不直接涂周。",
+      "sources": [
+        "ncm_ye",
+        "liang_chen_study"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "northern-qi"
+          ],
+          "to": null,
+          "note": "营州高保宁继续抵抗，主要齐地投周不等于辽西全部接收。",
+          "mask": "liaoxi-unconfirmed"
+        },
+        {
+          "from": [
+            "northern-qi"
+          ],
+          "to": "northern-zhou",
+          "note": "北周灭北齐，只接收已扣除陈占区和营州未确认带的齐面。"
+        }
+      ],
+      "limitations": [
+        "577年起营州—辽西部分未确认带留白；北周灭齐不等于取得高句丽或全部边外势力范围。"
+      ]
+    },
+    {
+      "year": 578,
+      "title": "陈军吕梁败退",
+      "description": "吴明彻在吕梁战败；下邳方向的北进小区撤去，淮南主要丧失另列579年。",
+      "sources": [
+        "chen579"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "chen"
+          ],
+          "to": "northern-zhou",
+          "note": "吕梁败后撤去下邳北进区，不提前把579全部淮南失地合并。",
+          "mask": "xiapi"
+        }
+      ]
+    },
+    {
+      "year": 579,
+      "title": "陈失淮南于北周",
+      "description": "寿阳、霍州相继陷落，陈书明确淮南之地尽没于周；以淮南概略走廊转周，陈退居江南主体。",
+      "sources": [
+        "chen579"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "chen"
+          ],
+          "to": "northern-zhou",
+          "note": "579淮南尽没于周；界线不是精确沿江每城的控制线。",
+          "mask": "huainan"
+        }
+      ]
+    },
+    {
+      "year": 581,
+      "title": "隋代北周",
+      "description": "杨坚建隋，接续北周主要辖区；陈与江陵西梁仍另色，不因隋立国提前统一南方。",
+      "sources": [
+        "sui_annals"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "northern-zhou"
+          ],
+          "to": "sui",
+          "note": "581隋代北周；既有未确认外围不随更号自动填入。"
+        }
+      ]
+    },
+    {
+      "year": 587,
+      "title": "隋废江陵西梁",
+      "description": "隋废西梁国，将江陵附近小区并入隋；陈仍存在，不能提前以587为南北统一年。",
+      "sources": [
+        "tongjian176"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "western-liang-jingling"
+          ],
+          "to": "sui",
+          "note": "587废江陵西梁；此处不是十六国后凉。"
+        }
+      ]
+    },
+    {
+      "year": 589,
+      "title": "隋灭陈，南北主要王朝统一",
+      "description": "隋军攻入建康，陈亡；将陈的已表示核心归隋，长安、洛阳、邺、成都、江陵与建康均属于隋。此为主要王朝统一，不等于征服突厥、吐谷浑、高句丽等周边政权。 岭南迎降并非同日完成，证据未细分的部分保留空白。",
+      "sources": [
+        "sui_annals",
+        "liang_chen_study",
+        "lingnan589"
+      ],
+      "reviewScope": "仅复核本断面的年代、主要区域转属及所列来源；边线为概略选择，不覆盖全部地点。",
+      "actions": [
+        {
+          "from": [
+            "chen"
+          ],
+          "to": null,
+          "note": "建康陈亡时岭南尚未有所附；未逐月确认后续迎降，故不自动转为隋实控面。",
+          "mask": "lingnan-unconfirmed"
+        },
+        {
+          "from": [
+            "chen"
+          ],
+          "to": "sui",
+          "note": "589隋灭陈，合并图示陈的主体区域；未确认远缘仍留白。"
+        }
+      ],
+      "limitations": [
+        "589取建康陈亡后的主要格局；岭南迎降有过程，未逐月确证部分留白，不称隋已同日接收全部岭南。"
+      ]
+    }
+  ]
+}

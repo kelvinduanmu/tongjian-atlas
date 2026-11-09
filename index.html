@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>东晋十六国 · 同一山河，百年变局</title>
+<title>东晋十六国—南北朝 · 至隋统一</title>
 <link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="atlas.css">
 <link rel="stylesheet" href="personal-data.css">
 <script src="atlas-config.js" defer></script><script src="atlas-api.js" defer></script>
@@ -35,7 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 </head>
 <body>
-<header class="masthead"><div class="brand"><span class="seal" aria-hidden="true">舆图</span><div><h1>东晋十六国</h1><p>同一山河，百年变局 <span>304—439</span></p></div></div><div class="header-actions"><a id="audit-entry" href="sources.html#audit">核查报告发布说明 ↗</a><a href="sources.html">原图来源与发布说明 ↗</a><a href="genealogy.html">人物谱系 ↗</a><button id="toggle-sidebar" aria-controls="sidebar" aria-expanded="true">收起侧栏</button></div></header>
+<header class="masthead"><div class="brand"><span class="seal" aria-hidden="true">舆图</span><div><h1>东晋十六国—南北朝</h1><p>至隋统一 <span id="atlas-year-span">304—589</span></p></div></div><div class="header-actions"><a id="audit-entry" href="sources.html#audit">核查报告发布说明 ↗</a><a href="sources.html">原图来源与发布说明 ↗</a><a href="genealogy.html">人物谱系 ↗</a><button id="toggle-sidebar" aria-controls="sidebar" aria-expanded="true">收起侧栏</button></div></header>
 <main class="workspace">
 <aside id="sidebar" aria-label="地图图层与政权">
 <section class="sidebar-section character-section" aria-label="共享人物战棋">
@@ -90,7 +90,7 @@ window.addEventListener('DOMContentLoaded', () => {
 <p class="hint">无登录，所有局域网浏览器共享保存。仅限可信局域网使用。编辑持续至后续年份，直到撤销或被后来的重叠编辑覆盖。</p>
 <p id="territory-offline" class="reference-note" hidden>离线模式仅可浏览，无法编辑。请打开 <a href="http://172.20.30.1:8765">局域网地图 172.20.30.1:8765</a>。</p>
 <fieldset id="territory-fields"><legend>1 · 选择地点与归属</legend><p id="territory-place">尚未选择地点。点击地图治所，或使用下方地名搜索。</p><button id="territory-find" type="button">搜索地点</button><p id="territory-period" class="hint"></p>
-<label for="territory-year">开始生效年</label><input id="territory-year" type="number" min="304" max="439" step="1" required>
+<label for="territory-year">开始生效年</label><input id="territory-year" type="number" min="304" max="589" step="1" required>
 <label for="territory-polity">目标势力</label><select id="territory-polity" required><option value="" selected disabled>请选择目标势力</option></select><p class="hint">列出全部政权，可将已灭亡政权用于自定义历史；不代表原始史实。</p>
 <label for="territory-note">编辑说明（可选）</label><input id="territory-note" type="text" maxlength="500" placeholder="说明此次划归的依据或设想">
 <h3>2 · 手绘并确认范围</h3><div class="territory-actions"><button id="territory-draw" type="button">开始绘制</button><button id="territory-undo-point" type="button">撤销一点</button><button id="territory-finish" type="button">完成范围</button><button id="territory-cancel" type="button">取消范围</button></div><p class="hint">地图单击逐点描边，至少三个不同顶点；范围须包含所选地点且不得自交。可拖动、缩放，用“完成范围”闭合；Esc 取消范围。</p><p id="territory-preview" class="reference-note" role="status">尚未绘制范围。</p><button id="territory-save" type="button">确认并保存共享编辑</button></fieldset>
@@ -119,7 +119,7 @@ window.addEventListener('DOMContentLoaded', () => {
 <div class="event-heading"><div class="year-block"><span>所选公元</span><output id="selected-year" for="year-range">382</output><span>年</span></div><div class="event-copy"><p id="snapshot-year" class="eyebrow">正在读取本地资料</p><h2 id="event-title">统一地理底图 · 历史政权断面</h2><p id="event-description"></p></div></div>
 <section id="formation-map-controls" class="formation-map-controls" aria-label="地图编队选人" hidden><strong id="formation-map-summary" role="status" aria-live="polite"></strong><p class="hint">点击棋子选择 / 取消选择，可平移缩放。Esc 或取消将丢弃整个编队草稿。</p><label for="formation-map-commander">指定主将</label><select id="formation-map-commander" aria-describedby="formation-map-summary"></select><p id="formation-map-notice" class="hint" role="status" aria-live="polite"></p><div class="territory-actions"><button id="formation-map-done" type="button">完成选人，填写并保存</button><button id="formation-map-cancel" type="button">取消编队草稿</button></div></section>
 <div class="map-stage"><div id="map" aria-label="地图，可拖动平移、滚轮或双指缩放"></div><div class="map-warning">疆域概略重建 · 非精确县界</div><div class="view-actions"><button id="northeast-view" type="button">东北视野</button><button id="reset-view" type="button">重置视野</button></div><p id="map-error" class="map-error" role="alert" hidden></p><div class="map-caption">固定地理参照 · 年份切换不移动视野</div></div>
-<section class="timeline" aria-label="304至439年时间轴"><div class="timeline-heading"><div><label for="year-range">历史进程</label><p id="year-note" aria-live="polite"></p></div><div class="playback"><button id="previous-event" aria-label="上一事件">←</button><button id="play" aria-pressed="false">播放</button><button id="next-event" aria-label="下一事件">→</button><label class="sr-only" for="play-speed">播放速度</label><select id="play-speed" aria-label="播放速度"><option value="2400">慢速</option><option value="1400" selected>标准</option><option value="700">快速</option></select></div></div>
-<input id="year-range" type="range" min="304" max="439" step="1" value="382" list="event-years" aria-label="选择公元304至439年" aria-describedby="year-note"><datalist id="event-years"></datalist><div id="event-ticks" class="event-ticks" aria-label="跳转历史事件"></div><div class="timeline-scale" aria-hidden="true"><span>304</span><span>330</span><span>360</span><span>390</span><span>420</span><span>439</span></div><p class="timeline-footnote">拖动逐年查看；播放与箭头跳转历史断面及用户编辑生效年，不插值疆界。</p></section>
+<section class="timeline" aria-label="304至589年时间轴"><div class="timeline-heading"><div><label for="year-range">历史进程</label><p id="year-note" aria-live="polite"></p></div><div class="playback"><button id="previous-event" aria-label="上一事件">←</button><button id="play" aria-pressed="false">播放</button><button id="next-event" aria-label="下一事件">→</button><label class="sr-only" for="play-speed">播放速度</label><select id="play-speed" aria-label="播放速度"><option value="2400">慢速</option><option value="1400" selected>标准</option><option value="700">快速</option></select></div></div>
+<input id="year-range" type="range" min="304" max="589" step="1" value="382" list="event-years" aria-label="选择公元304至589年" aria-describedby="year-note"><datalist id="event-years"></datalist><div id="event-ticks" class="event-ticks" aria-label="跳转历史事件"></div><div class="timeline-scale" aria-hidden="true"><span>304</span><span>361</span><span>418</span><span>475</span><span>532</span><span>589</span></div><p class="timeline-footnote">拖动逐年查看；播放与箭头跳转历史断面及用户编辑生效年，不插值疆界。</p></section>
 </section></main><noscript><p class="noscript">请启用 JavaScript，或<a href="sources.html">查看资料来源</a>。</p></noscript>
 </body></html>

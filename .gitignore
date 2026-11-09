@@ -26,6 +26,8 @@
 !/geo-data.js
 !/history-data.js
 !/history-reconstruction.source.js
+!/later-dynasties.json
+!/later_dynasties.py
 !/map-data.js
 !/review-data.js
 !/territory-corrections.json

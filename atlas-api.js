@@ -70,7 +70,13 @@
   function index() {
     if (!geographyIndex) {
       requireThat(window.GEO_DATA && window.HISTORY_DATA, '地图基础资料尚未加载，请刷新页面后重试');
+      const history = window.HISTORY_DATA;
+      const years = (history.snapshots || []).map(snapshot => snapshot.year);
+      const minYear = history.minYear ?? Math.min(...years);
+      const maxYear = history.maxYear ?? Math.max(...years);
+      requireThat(Number.isInteger(minYear) && Number.isInteger(maxYear) && minYear <= maxYear, '历史资料年份范围无效');
       geographyIndex = {
+        minYear, maxYear,
         places: new Map(window.GEO_DATA.places.map(place => [place.id, place])),
         polities: new Set(window.HISTORY_DATA.polities.map(polity => polity.id))
       };
@@ -313,7 +319,7 @@
     for (const item of state.edits) {
       fields(item, ['placeId', 'startYear', 'polityId', 'geometry', 'note', 'id', 'sequence', 'createdAt']);
       requireThat(places.has(item.placeId) && index().polities.has(item.polityId), '疆域编辑引用未知地点或势力');
-      requireThat(integer(item.startYear, 304, 439) && integer(item.sequence, 1, state.revision), '疆域编辑年份或序号无效');
+      requireThat(integer(item.startYear, index().minYear, index().maxYear) && integer(item.sequence, 1, state.revision), '疆域编辑年份或序号无效');
       uuid(item.id); stamp(item.createdAt); text(item.note, 500);
       const place = places.get(item.placeId); geometry(item.geometry, [place.lon, place.lat]);
     }
@@ -477,7 +483,7 @@
     const query = params.get('q').trim(), kind = params.get('kind'), scope = params.get('scope') || 'auto', year = Number(params.get('year'));
     text(query, 80, 1); requireThat(!/[\u0000-\u001f]/u.test(query), '搜索名称含控制字符');
     requireThat(['city', 'county', 'lake', 'river'].includes(kind) && ['auto', 'historical', 'modern'].includes(scope), '搜索类别或范围无效');
-    requireThat(/^\d{3}$/.test(params.get('year')) && integer(year, 304, 439), '搜索年份须为304至439');
+    requireThat(/^-?\d+$/.test(params.get('year')) && integer(year, index().minYear, index().maxYear), `搜索年份须为${index().minYear}至${index().maxYear}`);
     index();
     const overrides = await transaction(false, document => new Map(document.placePeriods.overrides.map(item => [item.placeId, item])));
     const water = ['lake', 'river'].includes(kind), rows = (water ? window.GEO_DATA[kind + 'Labels'] || [] : window.GEO_DATA.places).map(row => [row, kind]);

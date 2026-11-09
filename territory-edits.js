@@ -6,6 +6,10 @@
   const OFFLINE = window.AtlasUI.personal ? 'file:// 只读；请通过 HTTP/HTTPS 打开站点后编辑本机个人副本。' : '离线文件模式仅供浏览；疆域编辑请打开 http://172.20.30.1:8765/';
   const HTTP = /^https?:$/.test(window.location.protocol);
   const EPS = 1e-10;
+  const history = window.HISTORY_DATA;
+  const snapshotYears = (history?.snapshots || []).map(snapshot => snapshot.year);
+  const minYear = history?.minYear ?? Math.min(...snapshotYears);
+  const maxYear = history?.maxYear ?? Math.max(...snapshotYears);
   const places = new Map((window.GEO_DATA?.places || []).map(place => [place.id, place]));
   const polities = new Map((window.HISTORY_DATA?.polities || []).map(polity => [polity.id, polity]));
   const listeners = new Set();
@@ -66,7 +70,7 @@
   function validate(edit) {
     if (!edit || typeof edit !== 'object' || !places.has(edit.placeId)) throw new Error('请选择已知郡县或城邑');
     if (!polities.has(edit.polityId)) throw new Error('请选择已知目标势力');
-    if (!Number.isInteger(edit.startYear) || edit.startYear < 304 || edit.startYear > 439) throw new Error('生效年须为304至439之间的整数');
+    if (!Number.isInteger(minYear) || !Number.isInteger(maxYear) || !Number.isInteger(edit.startYear) || edit.startYear < minYear || edit.startYear > maxYear) throw new Error(`生效年须为${minYear}至${maxYear}之间的整数`);
     if (typeof edit.note !== 'string' || [...edit.note].length > 500) throw new Error('备注限500字');
     const geometry = edit.geometry;
     if (!geometry || geometry.type !== 'Polygon' || !Array.isArray(geometry.coordinates) || geometry.coordinates.length !== 1) {

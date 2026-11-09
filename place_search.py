@@ -3,6 +3,7 @@ from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
 import json
 import math
+from pathlib import Path
 import re
 import secrets
 import threading
@@ -22,6 +23,18 @@ CANDIDATE_FIELDS = {'name', 'kind', 'lon', 'lat', 'address', 'provider', 'provid
                     'coordinatePrecision', 'period'}
 HISTORICAL = 'https://chgis.hudci.org/tgaz/placename'
 PHOTON = 'https://photon.komoot.io/api/'
+
+
+def history_year_bounds(history):
+    years = [snapshot['year'] for snapshot in history.get('snapshots', [])]
+    if not years or any(type(year) is not int for year in years):
+        raise Invalid('历史断面年份无效')
+    minimum = history.get('minYear', min(years))
+    maximum = history.get('maxYear', max(years))
+    if type(minimum) is not int or type(maximum) is not int or minimum > maximum or min(years) > minimum:
+        raise Invalid('历史资料年份范围无效')
+    return minimum, maximum
+
 
 
 def in_bounds(lon, lat):
@@ -117,9 +130,18 @@ def photon_kind(properties, kind):
 
 
 class PlaceSearch:
-    def __init__(self, geo, period_store=None):
+    def __init__(self, geo, period_store=None, year_bounds=None):
         self.geo = geo
         self.period_store = period_store
+        if year_bounds is None:
+            raw = (Path(__file__).resolve().parent / 'history-data.js').read_text(encoding='utf-8').strip()
+            match = re.fullmatch(r'\s*window\.HISTORY_DATA\s*=\s*(.*?)\s*;?\s*', raw, re.S)
+            if not match:
+                raise Invalid('历史资料格式无效')
+            year_bounds = history_year_bounds(json.loads(match.group(1)))
+        self.min_year, self.max_year = year_bounds
+        if type(self.min_year) is not int or type(self.max_year) is not int or self.min_year > self.max_year:
+            raise Invalid('历史资料年份范围无效')
         self.cache = OrderedDict()
         self.lock = threading.Lock()
         self.slots = threading.BoundedSemaphore(4)
@@ -281,8 +303,8 @@ class PlaceSearch:
             raise Invalid('搜索名称须为1至80字')
         if kind not in KINDS or scope not in ('auto', 'historical', 'modern'):
             raise Invalid('搜索类别或来源范围不正确')
-        if not re.fullmatch(r'\d{3}', params['year']) or not 304 <= int(params['year']) <= 439:
-            raise Invalid('搜索年份须为304至439')
+        if not re.fullmatch(r'-?\d+', params['year']) or not self.min_year <= int(params['year']) <= self.max_year:
+            raise Invalid(f'搜索年份须为{self.min_year}至{self.max_year}')
         year = int(params['year'])
         if not self.slots.acquire(blocking=False):
             raise Invalid('搜索繁忙，请稍后重试')

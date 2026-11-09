@@ -33,7 +33,12 @@
     ['western-liang','西凉','#78a6ba'],['northern-liang','北凉','#759c69'],['dai','代','#a99d78'],
     ['northern-wei','北魏','#8874b8'],['xia','夏','#be875d'],['ran-wei','冉魏','#ba7d9c'],
     ['qiao-shu','谯蜀','#b88268'],['huan-chu','桓楚','#bca16b'],['qiuchi','仇池','#6fa58d'],
-    ['tuyuhun','吐谷浑','#b89c78'],['duan-xianbei','段部鲜卑','#8b9db8'],['rebels','贼','#795b57']
+    ['tuyuhun','吐谷浑','#b89c78'],['duan-xianbei','段部鲜卑','#8b9db8'],['rebels','贼','#795b57'],
+    ['southern-qi','南齐','#d5a34b'],['liang','梁','#d8ad58'],['chen','陈','#c88e45'],
+    ['eastern-wei','东魏','#9477bc'],['western-wei','西魏','#a17a9b'],
+    ['northern-qi','北齐','#797db5'],['northern-zhou','北周','#9c6e93'],
+    ['western-liang-jingling','西梁（江陵）','#b69468'],['sui','隋','#ad8053'],
+    ['hou-jing','侯景势力（后称汉）','#9b7765']
   ].map(([id,name,color]) => ({id,name,color}));
   const names = Object.fromEntries(polities.map(p => [p.id,p.name]));
   // Shared vertices: Qinling/Huai corridors, major basins and city anchors.

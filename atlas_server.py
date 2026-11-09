@@ -17,7 +17,7 @@ import uuid
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qsl, unquote, urlencode, urlsplit, urlunsplit
-from place_search import CANDIDATE_FIELDS, Invalid, PlaceSearch, validate_candidate
+from place_search import CANDIDATE_FIELDS, Invalid, PlaceSearch, history_year_bounds, validate_candidate
 from biography_search import BiographySearch, valid_name, validate_source
 from genealogy_search import GenealogyError, GenealogySearch
 from genealogy_store import GenealogyStore
@@ -642,6 +642,7 @@ class Store:
     def __init__(self, directory, data_dir, custom_places=None, lock=None):
         geo = read_assignment(directory / 'geo-data.js', 'GEO_DATA')
         history = read_assignment(directory / 'history-data.js', 'HISTORY_DATA')
+        self.min_year, self.max_year = history_year_bounds(history)
         self.places = {p['id']: [p['lon'], p['lat']] for p in geo['places']}
         self.places.update(custom_places or {})
         self.polities = {p['id'] for p in history['polities']}
@@ -668,8 +669,8 @@ class Store:
             raise Invalid('请选择已知郡县或城邑')
         if not isinstance(edit['polityId'], str) or edit['polityId'] not in self.polities:
             raise Invalid('请选择已知目标势力')
-        if type(edit['startYear']) is not int or not 304 <= edit['startYear'] <= 439:
-            raise Invalid('生效年须为304至439之间的整数')
+        if type(edit['startYear']) is not int or not self.min_year <= edit['startYear'] <= self.max_year:
+            raise Invalid(f'生效年须为{self.min_year}至{self.max_year}之间的整数')
         if not isinstance(edit['note'], str) or len(edit['note']) > 500:
             raise Invalid('备注限500字')
         validate_geometry(edit['geometry'], self.places[edit['placeId']])
@@ -989,7 +990,7 @@ def main():
         genealogies = GenealogyStore(data_dir, characters, genealogy_search)
         geo = read_assignment(directory / 'geo-data.js', 'GEO_DATA')
         place_periods = PlacePeriodStore(data_dir, geo)
-        place_search = PlaceSearch(geo, period_store=place_periods)
+        place_search = PlaceSearch(geo, period_store=place_periods, year_bounds=(store.min_year, store.max_year))
         server = ThreadingHTTPServer((args.bind, args.port), Handler)
     except (OSError, Invalid, GenealogyError, KeyError, TypeError, UnicodeError) as exc:
         parser.exit(1, '启动失败（未重置保存数据）：' + str(exc) + '\n')

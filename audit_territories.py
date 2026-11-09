@@ -52,6 +52,16 @@ POLITY_NAMES = {
     "qiuchi": ["仇池", "前仇池", "后仇池", "後仇池"],
     "tuyuhun": ["吐谷浑", "吐谷渾"],
     "duan-xianbei": ["段部", "段部鲜卑", "段部鮮卑"],
+    "southern-qi": ["南齐", "南齊", "南朝齐", "南朝齊"],
+    "liang": ["梁", "南梁", "南朝梁"],
+    "chen": ["陈", "陳", "南陈", "南陳", "南朝陈", "南朝陳"],
+    "eastern-wei": ["东魏", "東魏"],
+    "western-wei": ["西魏"],
+    "northern-qi": ["北齐", "北齊"],
+    "northern-zhou": ["北周"],
+    "sui": ["隋"],
+    "western-liang-jingling": ["西梁", "后梁", "後梁"],
+    "hou-jing": ["侯景", "侯景势力", "侯景勢力", "侯景汉", "侯景漢"],
 }
 # IDs are taken from the local canonical parent links, not guessed from numbering.
 POLITY_IDS = {
@@ -639,12 +649,13 @@ def main():
         "sourceBasis": {
             "scope": "All original GEO_DATA.places × original HISTORY_DATA.snapshots; no annual interpolation or saved user overrides.",
             "interpretation": "行政隶属不等于每年实际控制；明确地点/年代的人工复核规则优先，原行政链保留。核对一致仅表示无已识别疑点时资料证据与概略面相合，不是精确县界或全年实控已证实。范围缺失仅表示未覆盖，并非证明该地属于某国。",
-            "maps": "图题/断代/OCR见可用的map-crosscheck.json和map-ocr.json；本工具仅登记其哈希供交叉核验，不声称已看清图面边界，不将盛时图或不同年图直接作为当年归属。",
+            "maps": "原图题/断代/OCR见可用的map-crosscheck.json和map-ocr.json，不能将此前图册的核对范围延伸为440—589年的图面认证。后续断面依据later-dynasties.json单列事件和区域依据；本工具的点面计算不等于逐年实际疆域已获证实。",
             "temporal": "Only parent edges whose inclusive numeric begin/end cover the snapshot year are traversed. Unknown periods, predecessor/successor links and other-year parents are never borrowed. Approximate endpoints use ±1 year solely as a review heuristic, not a historical dating confidence interval; rule codes other than 1 follow existing atlas display caution.",
             "uncertainty": "侨寄迁治原文提示、跨百年代表点、同年同名多记录、行政边端点及403/420变局均不自动通过。行政链任何分支不完整亦不通过。",
             "distance": "distanceToBoundary / distanceToExpectedTerritory: approximate km; degree-plane nearest point followed by local equirectangular conversion, not an exact geodesic minimum. Null means unavailable; 10 km is a review priority only, never a correction tolerance.",
             "modernLand": "outside-modern-land使用原始GEO_DATA.land现代概化陆地covers判定，只提示坐标/古岸线待核，不改变点位、政治面或资料归属；即使有人工归属规则也不自动消除此警告。" ,
             "region": "大区仅按坐标粗分便于排序，非古州界：交州lat<22.5/lon<108.5；宁州南中lat<29.5/lon<106；岭南lat<26.5/lon>=106；其后西北巴蜀lon<106/lat>=29.5；北方lat>=34；余为江淮荆扬。",
+            "laterDynasties": "440—589年为有来源的区域概略续编，非精确县界或完整年度实控复原；仅以已列来源支持范围作点面检查，不将未知父级或无面判为真实无人或无政权。",
             "statusPrecedence": "固定参考 → 当年无效 → 多面问题 → 数据无效 → 范围缺失 → 行政证据不足 → 可信链与面矛盾 → 核对一致。所有附加问题保留于flags/reasons。",
         },
         "inputs": {key: {"file": path.name, "sha256": input_hashes[key]} for key, path in inputs.items()},
