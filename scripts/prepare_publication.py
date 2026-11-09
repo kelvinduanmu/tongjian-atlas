@@ -20,10 +20,9 @@ def save_assignment(path, symbol, data):
 def prepare(directory):
     geo_path = directory / 'geo-data.js'
     geo = load_assignment(geo_path, 'GEO_DATA')
-    geo.pop('terrain', None)
     geo.pop('historicalTileUrl', None)
-    geo['sources'] = [row for row in geo.get('sources', []) if not any(term in row.get('url', '') for term in ('registry.opendata.aws/terrain', 'tilezen/joerd', 'gis.sinica.edu.tw'))]
-    geo['publicationNote'] = '公开版未分发原图扫描、地形影像或中研院在线瓦片。历史地名保留CHGIS非商业许可和逐条来源；现代水系不是古水系复原。'
+    geo['sources'] = [row for row in geo.get('sources', []) if 'gis.sinica.edu.tw' not in row.get('url', '')]
+    geo['publicationNote'] = '公开版提供已注明来源的现代地形着色与阴影影像，不分发原图扫描或中研院在线瓦片。历史地名保留CHGIS非商业许可和逐条来源；现代地形、水系不是古地貌复原。'
     save_assignment(geo_path, 'GEO_DATA', geo)
     catalog_path = directory / 'map-data.js'
     catalog = load_assignment(catalog_path, 'MAP_DATA')

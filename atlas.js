@@ -106,7 +106,9 @@
   L.geoJSON(geo.land, { pane: 'land', interactive: false, style: { color: token('--line'), weight: 1, fillColor: token('--land'), fillOpacity: 1 } }).addTo(map);
   let terrain = null;
   if (geo.terrain && geo.terrain.url && geo.terrain.bounds) {
-    terrain = L.imageOverlay(geo.terrain.url, geo.terrain.bounds, { pane: 'terrain', opacity: .72, interactive: false }).addTo(map);
+    terrain = L.imageOverlay(geo.terrain.url, geo.terrain.bounds, { pane: 'terrain', opacity: .72, interactive: false, attribution: '地形：<a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener">Mapzen/AWS</a> · USGS SRTM/GMTED2010 · NOAA ETOPO1' }).addTo(map);
+    $('layer-terrain').checked = true;
+    $('layer-terrain').disabled = false;
     terrain.on('error', () => {
       $('layer-terrain').checked = false; $('layer-terrain').disabled = true;
       map.removeLayer(terrain);

@@ -19,6 +19,7 @@ FILES = (
     'character-manager.js', 'formation-manager.js', 'place-periods.js',
     'review-data.js', 'genealogy-data.js', 'genealogy-client.js', 'genealogy.js', 'genealogy.css',
     'LICENSE', 'THIRD_PARTY_NOTICES.md',
+    'terrain/china-relief.webp',
     'vendor/leaflet.js', 'vendor/leaflet.css', 'vendor/LEAFLET-LICENSE.txt',
     'vendor/polygon-clipping.umd.min.js', 'vendor/POLYGON-CLIPPING-LICENSE.txt',
     'vendor/images/layers.png', 'vendor/images/layers-2x.png',
@@ -85,8 +86,16 @@ def main():
     if not re.search(r"mode\s*:\s*['\"]personal['\"]", config) or re.search(r"mode\s*:\s*['\"]shared['\"]", config):
         raise ValueError('The static configuration must default to personal mode.')
     geo = json.loads(payloads['geo-data.js'].decode('utf-8').split('=', 1)[1].strip().rstrip(';'))
-    if geo.get('terrain') or geo.get('historicalTileUrl'):
-        raise ValueError('Run scripts/prepare_publication.py to remove undistributed optional imagery.')
+    if geo.get('historicalTileUrl'):
+        raise ValueError('Run scripts/prepare_publication.py to remove undistributed historical tiles.')
+    terrain = geo.get('terrain')
+    if not isinstance(terrain, dict) or not isinstance(terrain.get('url'), str):
+        raise ValueError('The published default terrain must have a local image reference.')
+    if local_resource(terrain['url'], 'geo-data.js') != 'terrain/china-relief.webp':
+        raise ValueError('Terrain must reference the attributed local relief image.')
+    relief = payloads['terrain/china-relief.webp']
+    if not relief.startswith(b'RIFF') or relief[8:12] != b'WEBP':
+        raise ValueError('Terrain image is not a valid WebP container.')
     catalog = json.loads(payloads['map-data.js'].decode('utf-8').split('=', 1)[1].strip().rstrip(';'))
     if any('file' in item or 'image' in item for item in catalog):
         raise ValueError('The map catalog must contain source links, not scan references.')
@@ -111,7 +120,7 @@ def main():
                   for name, content in sorted(payloads.items())],
         'excluded': ['Python and source-only tools', 'private user saves and exports',
                      'original maps and OCR', 'biography extracts and genealogy index',
-                     'original audit reports', 'terrain imagery and remote historical tiles'],
+                     'original audit reports', 'remote historical tiles'],
     }
     payloads['build-report.json'] = (json.dumps(report, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
     if DIST.is_symlink():

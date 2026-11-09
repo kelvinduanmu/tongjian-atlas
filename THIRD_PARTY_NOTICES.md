@@ -10,6 +10,7 @@
 | polygon-clipping | [上游项目](https://github.com/mfogel/polygon-clipping)，MIT | 保留 `vendor/POLYGON-CLIPPING-LICENSE.txt` 中实际权利人及完整条款。 |
 | OpenCC 字符匹配表 | [TSCharacters.txt](https://github.com/BYVoid/OpenCC/blob/master/data/dictionary/TSCharacters.txt)，Apache-2.0 | `biography-normalization.json` 是姓名匹配用途的抽取/转换表，不改写传记引文；保留来源字段及 `vendor/OPENCC-LICENSE.txt`。仅 Python 源码版使用，Pages 不发布此表。 |
 | 现代陆地、河湖线面 | [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/)，公有领域 | `geo-data.js` 中 1:50m/1:10m 的概化与裁剪，及历史多边形的现代陆地裁剪。现代河岸、海岸不是古地貌复原；不适合导航。 |
+| 现代地形着色与坡向阴影影像 | [Mapzen/AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/)；USGS SRTM/GMTED2010、NOAA ETOPO1 | 发布 `terrain/china-relief.webp`，由 Terrarium z5 高程瓦片拼接、着色并计算阴影，覆盖东亚阅读区域；不是古地貌、古海岸或测绘导航产品。SRTM/GMTED2010 data courtesy of the U.S. Geological Survey；ETOPO1 credit: DOC/NOAA/NESDIS/NCEI, U.S. Department of Commerce。保留美国政府数据在美国境内不受版权保护的说明，不将上游全球所有数据或境外权利一概改称 MIT／无条件公有领域。原始数据及再利用条件见[上游署名说明](https://github.com/tilezen/joerd/blob/master/docs/attribution.md)。 |
 | 历史州、郡、县治所记录 | CHGIS / China Historical GIS，Harvard University 与 Fudan University；[TGAZ](https://chgis.hudci.org/tgw/)，记录声明 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) | `geo-data.js` 是304—439年九个断面检索的筛选、去重与显示整理，保留逐条 URI、许可、年代及定位警告；不保证全量，不推定各年实控。须署名、标明修改、仅作非商业使用。不得把此部分改标 MIT。 |
 | 历史地点/水域采用的现代区域参照点 | 各记录 `source`、`coordinateSource` 中明确的 OpenStreetMap 与 GeoNames | 公开 `geo-data.js` 已包含部分此类坐标，不仅限于运行时检索。OSM 部分署名 OpenStreetMap contributors，保留 [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/)；GeoNames 部分署名 GeoNames，保留 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。转换说明、原节点/关系链接与现代坐标用途按条目保留；发布源码提供这些记录的可机器读取形式。不得把现代代表点声称为古城/河岸实测，或把这些部分改标 MIT。 |
 | 项目整理的历史事实、手绘概略疆域、研究说明和核心谱系 | `history-data.js`、`history-reconstruction.source.js`、`territory-corrections.json`、`curated-evidence.json`、`review-data.js`、`genealogy-data.js` 及个别附出处地点 | 项目整理/概略绘制不等于引用站点的原图或文字授权。保留来源和未决问题；本次代码 MIT 不覆盖这些数据，不授予第三方材料的新许可。对地图作者的原创部分亦不冒充已经取得额外的商业授权。 |
@@ -27,7 +28,10 @@
 
 1. 原地图扫描、图册、01—05目录、原始 OCR、图片缓存及完整原始核验报告。历史地图来源目录 `map-data.js` 仅保存标题、年代和来源页面链接，不保存/嵌入扫描文件或扫描图片直链。可从[国学导航地图来源页面](http://guoxue123.com/other/map/zgmap/007.htm)自行查阅；外站条款仍适用。
 2. 中研院382年在线地图瓦片。曾用于非商业参照不等于获得再分发许可；公开版已移除请求地址。
-3. 可选 Mapzen/AWS Terrain Tiles 拼接地形图。原处理链记载 USGS SRTM/GMTED2010 与 NOAA ETOPO1，并做拼接、高程着色和坡向阴影；为避免不完整输入链的授权推断，本版不附地形图。若自行重建，须核对[上游按地区署名要求](https://github.com/tilezen/joerd/blob/master/docs/attribution.md)，不能宣称 Mapzen 全球所有输入均为公有领域。
-4. 任何用户共享保存 JSON、浏览器导出、账号凭证、原部署目录和原始传记/谱系资料快照。
+3. 任何用户共享保存 JSON、浏览器导出、账号凭证、原部署目录和原始传记/谱系资料快照。
 
 核验报告并非“全部历史事实已经验证”的证明。公开版保留局部证据和不确定性；省略原报告是分发边界，不是消除原有疑点。
+
+## 地形影像的处理与使用限制
+
+本项目对高程数据进行了拼接、分辨率概化、高程配色和坡向阴影渲染；这些显示处理不代表 USGS、NOAA 或 Mapzen 对本项目的认可。数据按现状提供，不保证适合特定用途，不能用于导航或精确工程测量。现代地形只能帮助读史定位，不复原公元304—589年各年的地表、水面及河道。网站底部及来源页面保留署名，影像与历史地图扫描的再分发权限分别处理。

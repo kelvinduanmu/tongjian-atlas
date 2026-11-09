@@ -41,6 +41,9 @@
 !/genealogy_store.py
 !/build_territories.py
 !/audit_territories.py
+!/terrain/
+/terrain/*
+!/terrain/china-relief.webp
 !/vendor/
 /vendor/*
 !/vendor/leaflet.js
