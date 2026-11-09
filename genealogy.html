@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>家族谱系 · 东晋十六国</title>
+<link rel="stylesheet" href="atlas.css"><link rel="stylesheet" href="genealogy.css">
+<link rel="stylesheet" href="personal-data.css">
+<script src="atlas-config.js" defer></script><script src="atlas-api.js" defer></script>
+<script src="geo-data.js" defer></script><script src="history-data.js" defer></script><script src="personal-data.js" defer></script>
+<script src="genealogy-data.js" defer></script><script src="genealogy-client.js" defer></script><script src="genealogy.js" defer></script>
+</head>
+<body class="genealogy-page">
+<a class="skip-link" href="#genealogy-controls">跳至谱系操作</a>
+<header class="masthead"><div class="brand"><span class="seal" aria-hidden="true">谱系</span><div><h1>家族谱系</h1><p>东晋十六国 · 从人物读懂家族</p></div></div><nav class="header-actions" aria-label="页面导航"><a href="index.html">← 返回地图</a></nav></header>
+<main class="genealogy-main">
+<section class="genealogy-intro" aria-labelledby="family-title"><div><p id="family-kind" class="eyebrow">人物关系 / 核心选录</p><h2 id="family-title">正在读取家族资料…</h2><p id="family-description"></p></div><div class="reading-note"><p>连线自上而下表示<strong>亲子关系</strong>，不表示政治继承。</p><p>这里只选录部分人物，并非完整族谱；同姓不能证明血缘。层级仅为本图排布，不是传统族谱世次。</p><p id="family-scope"></p></div></section>
+<section id="family-provenance" class="family-provenance" aria-labelledby="provenance-title" hidden><h2 id="provenance-title">导入资料 · 尚未经人工核实</h2><p id="family-generated-at"></p><p>本族依据检索来源生成并保存，不属于本地人工选录资料，也不代表完整族谱。请结合下方来源逐条核对人物与亲子关系；未收录不等于不存在。</p><ul id="family-warnings"></ul></section>
+<p id="shared-status" class="reference-note" role="status" aria-live="polite"></p>
+<p id="genealogy-status" class="reference-note" role="status" aria-live="polite">正在读取本地谱系资料…</p>
+<section id="genealogy-controls" class="genealogy-controls" aria-label="谱系操作" tabindex="-1">
+<label class="family-field" for="family-select">选择家族<select id="family-select" disabled></select></label>
+<form id="person-search-form" role="search"><label for="person-search">查找姓名或别名</label><div class="search-field"><input id="person-search" type="search" autocomplete="off" placeholder="输入姓名或别名" aria-controls="person-search-results" disabled><button type="submit" disabled>查找</button></div></form>
+<button id="show-family" type="button" disabled>显示全族</button>
+<button id="refresh-families" type="button" disabled>刷新共享家族</button>
+</section>
+<div id="search-panel" class="search-panel" hidden><p id="search-status" role="status" aria-live="polite"></p><ul id="person-search-results" aria-label="姓名搜索结果"></ul></div>
+<div id="genealogy-workspace" class="genealogy-workspace" hidden>
+<section class="tree-panel" aria-labelledby="tree-title"><div class="tree-toolbar"><div><h2 id="tree-title">亲子关系图</h2><p id="tree-count" class="hint"></p></div><div class="tree-actions" aria-label="视图缩放"><button id="zoom-out" type="button" aria-label="缩小关系图">−</button><output id="zoom-level" aria-live="polite">100%</output><button id="zoom-in" type="button" aria-label="放大关系图">＋</button><button id="zoom-reset" type="button">原始大小</button><button id="zoom-fit" type="button">适合窗口</button></div></div>
+<p id="tree-help" class="tree-help">横向、纵向滚动查看分支；Tab 切换人物，Enter 或空格查看资料。选中人物的直接亲子连线以朱色强调。</p>
+<div id="tree-viewport" class="tree-viewport" tabindex="0" role="region" aria-label="可滚动的家族关系图" aria-describedby="tree-help"><div id="tree-extent"><div id="tree-stage"><svg id="tree-connectors" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg><div id="tree-generations" aria-hidden="true"></div><div id="tree-people"></div></div></div></div>
+<p class="tree-footnote">未列出父母或子女，只表示本次选录未收录，不表示不存在。点击人物后可逐条核对关系依据。</p>
+</section>
+<aside id="person-detail" class="person-detail" aria-labelledby="person-detail-title" tabindex="-1"><p class="eyebrow">人物与依据</p><h2 id="person-detail-title">选择一位人物</h2><div id="person-detail-content"><p>点击图中姓名，查看身份、直接亲属与文献出处。</p></div></aside>
+</div>
+<section id="family-sources" class="family-sources" aria-labelledby="family-sources-title" hidden><h2 id="family-sources-title">本族资料来源</h2><p id="family-source-note" class="hint">本地选录资料随地图提供；打开文献链接需要联网。关系说明中的保留意见以资料原文为准。</p><ul id="family-source-list"></ul></section>
+<noscript><p class="reference-note">谱系图需要 JavaScript 才能显示。请启用后重新打开，或<a href="index.html">返回地图</a>。</p></noscript>
+</main>
+</body>
+</html>

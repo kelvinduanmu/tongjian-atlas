@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>东晋十六国 · 同一山河，百年变局</title>
+<link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="atlas.css">
+<link rel="stylesheet" href="personal-data.css">
+<script src="atlas-config.js" defer></script><script src="atlas-api.js" defer></script>
+<script src="personal-data.js" defer></script>
+<script src="genealogy-data.js" defer></script>
+<script src="genealogy-client.js" defer></script>
+<script src="formation-manager.js" defer></script>
+<script src="character-manager.js" defer></script>
+<script src="map-data.js" defer></script><script src="geo-data.js" defer></script><script src="history-data.js" defer></script><script src="vendor/leaflet.js" defer></script><script src="vendor/polygon-clipping.umd.min.js" defer></script><script src="territory-edits.js" defer></script><script src="territory-editor.js" defer></script><script src="place-manager.js" defer></script><script src="review-data.js" defer></script><script src="place-periods.js" defer></script><script src="atlas.js" defer></script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const editor = window.ATLAS?.getState?.().territory;
+  if (!editor) {
+    const summary = document.getElementById('territory-summary');
+    summary.textContent = '编辑模块未能初始化，请刷新页面重新加载；若仍失败，请检查脚本加载错误。';
+    summary.setAttribute('role', 'alert');
+    document.getElementById('territory-toggle').disabled = true;
+  }
+  if (!window.ATLAS?.getState?.().annotations) {
+    document.getElementById('annotation-summary').textContent = '地点标注模块未能初始化，请刷新页面重新加载；基础地图仍可浏览。';
+    document.getElementById('annotation-summary').setAttribute('role', 'alert');
+    document.getElementById('annotation-toggle').disabled = true;
+  }
+  if (!window.ATLAS?.getState?.().characters) {
+    document.getElementById('character-summary').textContent = '人物模块未能初始化，请刷新页面；基础地图仍可浏览。';
+    document.getElementById('character-summary').setAttribute('role', 'alert');
+    document.getElementById('character-toggle').disabled = true;
+  }
+});
+</script>
+</head>
+<body>
+<header class="masthead"><div class="brand"><span class="seal" aria-hidden="true">舆图</span><div><h1>东晋十六国</h1><p>同一山河，百年变局 <span>304—439</span></p></div></div><div class="header-actions"><a id="audit-entry" href="sources.html#audit">核查报告发布说明 ↗</a><a href="sources.html">原图来源与发布说明 ↗</a><a href="genealogy.html">人物谱系 ↗</a><button id="toggle-sidebar" aria-controls="sidebar" aria-expanded="true">收起侧栏</button></div></header>
+<main class="workspace">
+<aside id="sidebar" aria-label="地图图层与政权">
+<section class="sidebar-section character-section" aria-label="共享人物战棋">
+<button id="character-toggle" type="button" aria-expanded="false" aria-controls="character-panel">人物战棋</button><p id="character-summary" class="hint" role="status">人物战棋 · 正在读取…</p>
+<div id="character-panel" hidden><div class="section-heading"><h2>人物战棋</h2><button id="character-close" type="button">关闭</button></div>
+<p class="reference-note">用户自定人物与位置，跨时间轴固定显示；不是人物历史行踪推演。所属势力由你选择，拖过国界不会改变。</p>
+<p class="hint">君：王冠六角旗牌；臣：官帽圆牌。同势力同色。点击棋子查看简介，拖动棋子共享保存。无登录，仅限可信局域网。</p>
+<p class="hint">隐藏人物仅收起地图棋子，资料与位置仍保留；在下方共享人物中搜索、查看或恢复。隐藏状态会共享保存。</p>
+<p id="character-offline" class="reference-note" hidden>文件模式无法读取或保存共享人物。请打开 <a href="http://172.20.30.1:8765/">局域网地图 172.20.30.1:8765</a>。</p>
+<div class="territory-actions"><button id="character-new" type="button">新增人物</button><button id="character-refresh" type="button">刷新共享人物</button></div>
+<div class="character-search"><label for="character-search">搜索已建共享人物</label><input id="character-search" type="search" autocomplete="off" placeholder="输入姓名，先检查是否已创建" aria-controls="character-records" aria-describedby="character-search-status"><button id="character-search-clear" type="button">清空搜索</button><p id="character-search-status" class="hint" role="status" aria-live="polite"></p></div>
+<form id="character-form" hidden><fieldset id="character-fields"><legend id="character-form-title">新增人物</legend>
+<label for="character-name">姓名（1—60字）</label><input id="character-name" required autocomplete="off" aria-describedby="character-duplicate-status character-biography-status">
+<div id="character-duplicate-notice" hidden><p id="character-duplicate-status" class="hint" role="status" aria-live="polite"></p><div id="character-duplicate-matches" class="character-duplicate-matches" aria-label="已建共享人物姓名匹配"></div></div>
+<button id="character-biography-custom" type="button" aria-pressed="false">结果不匹配，自定义人物 / 不采用搜索结果</button><button id="character-biography-retry" type="button">主动重新检索候选</button><p id="character-biography-status" class="hint" role="status" aria-live="polite">自动检索仅作辅助；可直接自定义人物，简介允许留空。</p>
+<div id="character-biography-candidates" class="character-biography-candidates" aria-label="人物身份候选" aria-busy="false"></div>
+<label for="character-role">角色</label><select id="character-role" required><option value="monarch">君主 · 君</option><option value="minister">大臣 · 臣</option></select>
+<label for="character-polity">所属势力</label><select id="character-polity" required><option value="" disabled selected>请选择势力</option></select>
+<label for="character-biography">人物简介（可编辑，最多3000字）</label><textarea id="character-biography" rows="6" aria-describedby="character-biography-source" placeholder="可填写自己的资料，也可先留空。修改网上摘录后将标为用户修订，不再声称原文来源。"></textarea><div id="character-biography-source" class="character-biography-source"></div>
+<p id="character-position" class="reference-note">尚未选择位置。</p><button id="character-place" type="button">在地图点选位置</button>
+<div class="territory-actions"><button id="character-save" type="submit">确认并共享保存</button><button id="character-cancel" type="button">取消草稿</button></div></fieldset></form>
+<section id="formation-section" aria-labelledby="formation-heading">
+<div class="section-heading"><h3 id="formation-heading">共享编队</h3><button id="formation-new" type="button" disabled>新建编队</button></div>
+<p class="hint">每队2—50人，每人只可加入一队；可跨势力编队，不改变人物身份与所属势力。主将军旗代表整队，拖动军旗会移动全部成员（包括已隐藏成员）。隐藏主将时整队军旗暂不显示；恢复主将后重新显示。</p>
+<p id="formation-summary" class="hint" role="status">正在读取编队…</p>
+<form id="formation-form" hidden><fieldset id="formation-fields"><legend id="formation-form-title">新建编队</legend>
+<label for="formation-name">编队名称（1—60字）</label><input id="formation-name" required autocomplete="off">
+<button id="formation-map-select" type="button" aria-pressed="false" aria-controls="formation-map-controls">在地图上选择成员</button><p class="hint">地图选人仅展开未隐藏人物；已隐藏人物仍可在下方勾选管理，不会自动恢复。点击棋子增减成员；首位选中的人物默认担任主将，可随时修改。选人不会移动棋子或提前保存。</p>
+<fieldset><legend>选择已保存人物</legend><p id="formation-count" class="hint" role="status"></p><div id="formation-roster" class="formation-roster" aria-describedby="formation-count"></div></fieldset>
+<label for="formation-commander">主将（从已选成员中指定）</label><select id="formation-commander" required></select>
+<p class="hint">取消勾选只会让人物退出编队，不会删除人物或移动棋子。</p>
+<div class="territory-actions"><button id="formation-save" type="submit">确认并共享保存</button><button id="formation-retry" type="button" hidden>采用最新版本并重试保存</button><button id="formation-cancel" type="button">取消草稿</button></div>
+</fieldset></form>
+<p id="formation-status" class="hint" role="status" aria-live="polite"></p><ol id="formation-records" class="territory-records formation-records"></ol>
+</section>
+<p id="character-status" class="hint" role="status" aria-live="polite"></p><h3>共享人物</h3><ol id="character-records" class="territory-records"></ol></div></section>
+<section class="sidebar-section annotation-section" aria-label="添加地点与共享标注">
+<button id="annotation-toggle" type="button" aria-expanded="false" aria-controls="annotation-panel">添加地点</button><p id="annotation-summary" class="hint" role="status">用户标注 · 正在读取…</p>
+<div id="annotation-panel" hidden><div class="section-heading"><h2>用户标注</h2><button id="annotation-close" type="button">关闭</button></div>
+<p class="reference-note">真实地名检索 → 选择候选 → 核对位置 → 确认保存。现代地理点不是古治所；河湖仅标注定位点，不复原河道或湖面。</p>
+<p class="hint">搜索范围：东亚 73°—136°E、15°—54°N。历史检索参考当前地图年份。标注跨年份显示，所有局域网浏览器共享。</p>
+<p id="annotation-offline" class="reference-note" hidden>文件模式仅供浏览。请打开 <a href="http://172.20.30.1:8765/">局域网地图 172.20.30.1:8765</a> 后搜索与保存。</p>
+<form id="annotation-search-form"><fieldset id="annotation-search-fields"><legend>1 · 搜索真实地点</legend><label for="annotation-query">地名（去除首尾空白后1—80字）</label><input id="annotation-query" type="search" minlength="1" maxlength="80" required autocomplete="off">
+<label for="annotation-kind">类别</label><select id="annotation-kind"><option value="city">城邑</option><option value="county">郡县</option><option value="lake">湖泊</option><option value="river">河流</option></select>
+<label for="annotation-scope">来源范围</label><select id="annotation-scope"><option value="auto">历史优先，兼查现代地理</option><option value="historical">仅历史资料</option><option value="modern">仅现代地理</option></select><button id="annotation-search" type="submit">搜索候选</button></fieldset></form>
+<p id="annotation-status" class="hint" role="status" aria-live="polite"></p><ul id="annotation-warnings" class="hint"></ul><div id="annotation-candidates" class="annotation-candidates" aria-label="搜索候选"></div>
+<form id="annotation-save-form" hidden><fieldset id="annotation-save-fields"><legend>2 · 确认地图预览</legend><p id="annotation-selection" class="reference-note"></p><label for="annotation-name">标注名称</label><input id="annotation-name" maxlength="80" required><label for="annotation-note">备注（可选，最多500字）</label><textarea id="annotation-note" maxlength="500" rows="3"></textarea><div class="territory-actions"><button id="annotation-save" type="submit">确认位置并保存</button><button id="annotation-cancel" type="button">取消预览</button></div></fieldset></form>
+<div class="territory-actions"><button id="annotation-refresh" type="button">刷新共享标注</button></div><h3>已保存地点</h3><ol id="annotation-records" class="territory-records"></ol></div></section>
+<section class="sidebar-section territory-section" aria-label="共享疆域编辑"><button id="territory-toggle" type="button" aria-expanded="false" aria-controls="territory-panel">编辑疆域</button><p id="territory-summary" class="hint" role="status">原始历史图 · 正在读取共享编辑…</p><div id="territory-panel" hidden>
+<div class="section-heading"><h2>自定义疆域</h2><button id="territory-close" type="button">退出</button></div>
+<p class="reference-note">没有县界数据。请手绘实际划归范围；这是用户编辑范围，不是已考证县界。原始历史资料不变。</p>
+<p class="hint">无登录，所有局域网浏览器共享保存。仅限可信局域网使用。编辑持续至后续年份，直到撤销或被后来的重叠编辑覆盖。</p>
+<p id="territory-offline" class="reference-note" hidden>离线模式仅可浏览，无法编辑。请打开 <a href="http://172.20.30.1:8765">局域网地图 172.20.30.1:8765</a>。</p>
+<fieldset id="territory-fields"><legend>1 · 选择地点与归属</legend><p id="territory-place">尚未选择地点。点击地图治所，或使用下方地名搜索。</p><button id="territory-find" type="button">搜索地点</button><p id="territory-period" class="hint"></p>
+<label for="territory-year">开始生效年</label><input id="territory-year" type="number" min="304" max="439" step="1" required>
+<label for="territory-polity">目标势力</label><select id="territory-polity" required><option value="" selected disabled>请选择目标势力</option></select><p class="hint">列出全部政权，可将已灭亡政权用于自定义历史；不代表原始史实。</p>
+<label for="territory-note">编辑说明（可选）</label><input id="territory-note" type="text" maxlength="500" placeholder="说明此次划归的依据或设想">
+<h3>2 · 手绘并确认范围</h3><div class="territory-actions"><button id="territory-draw" type="button">开始绘制</button><button id="territory-undo-point" type="button">撤销一点</button><button id="territory-finish" type="button">完成范围</button><button id="territory-cancel" type="button">取消范围</button></div><p class="hint">地图单击逐点描边，至少三个不同顶点；范围须包含所选地点且不得自交。可拖动、缩放，用“完成范围”闭合；Esc 取消范围。</p><p id="territory-preview" class="reference-note" role="status">尚未绘制范围。</p><button id="territory-save" type="button">确认并保存共享编辑</button></fieldset>
+<p id="territory-status" class="hint" role="status" aria-live="polite"></p><div class="territory-actions"><button id="territory-refresh" type="button">刷新共享编辑</button><button id="territory-clear" type="button">恢复原始图</button></div><h3>共享编辑记录</h3><ol id="territory-records" class="territory-records"></ol>
+</div></section>
+<section class="sidebar-section"><div class="section-heading"><h2>当期政权</h2><span id="polity-count">—</span></div><p class="hint">点击图例聚焦填色，不改变地图视野。</p><div id="legend" class="legend"></div></section>
+<section class="sidebar-section"><h2><label for="city-search">寻找地名与水名</label></h2><input type="search" id="city-search" placeholder="输入地名、河湖古今名或别名" autocomplete="off" aria-controls="search-results"><p id="search-status" class="hint" role="status">搜索城市、郡县治所、河流与湖泊，点击结果才移动视野。</p><div id="search-results" class="search-results"></div><div id="search-pagination" class="search-pagination" hidden><button id="search-previous" type="button">上一页</button><span id="search-page" class="hint"></span><button id="search-next" type="button">下一页</button></div><p id="place-notice" class="reference-note" role="status" hidden></p></section>
+<section class="sidebar-section" aria-label="用户显示年代"><h2>用户显示年代</h2><p class="hint">在上方搜索原始地点，点击结果后选择“编辑显示年代”。找不到地图标记时，也可取消勾选“仅显示所选年份有效建置”。原始资料年代不会被修改。</p><p id="place-period-summary" class="hint" role="status">正在读取共享显示年代…</p><button id="place-period-refresh" type="button">刷新共享年代</button></section>
+<section class="sidebar-section"><h2>底图与参照</h2><div class="layer-controls">
+<label><input type="checkbox" id="layer-politics" checked>政权填色与概略边界</label>
+<label><input type="checkbox" id="layer-cities" checked>城市与郡县治所</label>
+<label><input type="checkbox" id="layer-annotations" checked>用户标注（城邑 / 郡县 / 河湖定位点）</label>
+<label><input type="checkbox" id="layer-characters" checked>人物战棋（跨年份固定位置）</label>
+<label><input type="checkbox" id="layer-rivers" checked>河流与湖泊</label>
+<label><input type="checkbox" id="layer-river-labels" checked>河流与湖泊名称（点击查看说明）</label>
+<label><input type="checkbox" id="layer-terrain" checked>地形起伏</label>
+<label><input type="checkbox" id="layer-mountains">山川名称</label>
+<label><input type="checkbox" id="layer-historical">382年州郡参照 <span class="online">联网</span></label></div>
+<p id="water-count" class="hint" role="status"></p>
+<p class="reference-note">州郡参照固定382年，不是当前年行政区。中研院图层仅供非商业使用。</p><label class="opacity-label" for="historical-opacity">州郡图透明度 <output id="opacity-value">45%</output></label><input id="historical-opacity" type="range" min="0" max="100" value="45" disabled><p id="tile-status" class="hint" role="status">默认关闭；联网参照不可离线使用。</p><p class="hint">地形、水系为现代自然地理参考；古代河道与岸线可能不同。</p>
+</section>
+<section class="sidebar-section"><h2>治所显示范围</h2><p id="place-count" class="hint" role="status"></p><label class="place-type-label" for="place-type">建置类型</label><select id="place-type"><option value="all">全部</option><option value="prefecture">郡 / 州</option><option value="county">县</option></select><div class="layer-controls"><label><input type="checkbox" id="place-year-only" checked>仅显示所选年份有效建置</label></div><p class="hint">行政建置按年份筛选；固定古城另作地理参照，不表示当年为都城或郡治。年代不明行政记录不显示。关闭筛选可查看全部时期，同名行政记录附年代；共址记录可从弹窗或搜索选择。搜索异期记录仅临时显示所选一条，不改变年份筛选。</p></section>
+<details id="source-details" class="sidebar-section"><summary>来源与重建方法</summary><div class="source-body"><p id="method-note"></p><h3>当前历史断面</h3><div id="history-sources"></div><h3>地理与郡县治所资料</h3><div id="geo-sources"></div><p>城市与郡县治所点仅为定位参照，不表示各年政权控制或建置连续。底图与政权多边形独立，不以现代省界代替古界。</p><h3>原图与河流对照说明</h3><p>原图扫描与识读资料未随公开版发布。现代水系仅作定位参照，古河道未复原；不能将现代河道当作382年河道。</p><a id="river-reference-382" href="sources.html">查看原图来源与发布范围 ↗</a></div></details>
+</aside>
+<section class="map-panel" aria-label="连续地理历史地图">
+<div class="event-heading"><div class="year-block"><span>所选公元</span><output id="selected-year" for="year-range">382</output><span>年</span></div><div class="event-copy"><p id="snapshot-year" class="eyebrow">正在读取本地资料</p><h2 id="event-title">统一地理底图 · 历史政权断面</h2><p id="event-description"></p></div></div>
+<section id="formation-map-controls" class="formation-map-controls" aria-label="地图编队选人" hidden><strong id="formation-map-summary" role="status" aria-live="polite"></strong><p class="hint">点击棋子选择 / 取消选择，可平移缩放。Esc 或取消将丢弃整个编队草稿。</p><label for="formation-map-commander">指定主将</label><select id="formation-map-commander" aria-describedby="formation-map-summary"></select><p id="formation-map-notice" class="hint" role="status" aria-live="polite"></p><div class="territory-actions"><button id="formation-map-done" type="button">完成选人，填写并保存</button><button id="formation-map-cancel" type="button">取消编队草稿</button></div></section>
+<div class="map-stage"><div id="map" aria-label="地图，可拖动平移、滚轮或双指缩放"></div><div class="map-warning">疆域概略重建 · 非精确县界</div><div class="view-actions"><button id="northeast-view" type="button">东北视野</button><button id="reset-view" type="button">重置视野</button></div><p id="map-error" class="map-error" role="alert" hidden></p><div class="map-caption">固定地理参照 · 年份切换不移动视野</div></div>
+<section class="timeline" aria-label="304至439年时间轴"><div class="timeline-heading"><div><label for="year-range">历史进程</label><p id="year-note" aria-live="polite"></p></div><div class="playback"><button id="previous-event" aria-label="上一事件">←</button><button id="play" aria-pressed="false">播放</button><button id="next-event" aria-label="下一事件">→</button><label class="sr-only" for="play-speed">播放速度</label><select id="play-speed" aria-label="播放速度"><option value="2400">慢速</option><option value="1400" selected>标准</option><option value="700">快速</option></select></div></div>
+<input id="year-range" type="range" min="304" max="439" step="1" value="382" list="event-years" aria-label="选择公元304至439年" aria-describedby="year-note"><datalist id="event-years"></datalist><div id="event-ticks" class="event-ticks" aria-label="跳转历史事件"></div><div class="timeline-scale" aria-hidden="true"><span>304</span><span>330</span><span>360</span><span>390</span><span>420</span><span>439</span></div><p class="timeline-footnote">拖动逐年查看；播放与箭头跳转历史断面及用户编辑生效年，不插值疆界。</p></section>
+</section></main><noscript><p class="noscript">请启用 JavaScript，或<a href="sources.html">查看资料来源</a>。</p></noscript>
+</body></html>

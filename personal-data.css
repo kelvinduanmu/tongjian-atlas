@@ -1,0 +1,17 @@
+.personal-data { padding: var(--s3) var(--s6); border-bottom: 1px solid var(--line); background: var(--accent-soft); color: var(--ink); }
+.personal-data > * + * { margin-top: var(--s2); }
+.personal-data p { font-size: var(--text-sm); overflow-wrap: anywhere; }
+.personal-data-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s4); }
+.personal-data-actions label, .personal-data-actions a { font-size: var(--text-sm); }
+.personal-data-actions button, .personal-data-actions input { min-height: var(--s10); max-width: 100%; }
+.personal-data-actions input { min-width: 0; font: inherit; }
+body:has(> .workspace) { display: flex; flex-direction: column; height: 100dvh; }
+body:has(> .workspace) > .masthead, body:has(> .workspace) > .personal-data { flex: none; }
+body:has(> .workspace) > .workspace { flex: 1; height: auto; min-height: 0; }
+@media (max-width: 680px) {
+  .personal-data { padding: var(--s3) var(--s4); }
+  .personal-data-actions { align-items: stretch; }
+  .personal-data-actions input { width: 100%; }
+  body:has(> .workspace) { height: auto; min-height: 100dvh; }
+  body:has(> .workspace) > .workspace { min-height: calc(100dvh - var(--header)); }
+}
