@@ -14,6 +14,7 @@
     const banner = node('p', '', 'character-notice'); banner.id = 'character-notice'; banner.hidden = true; banner.setAttribute('role', 'status'); banner.setAttribute('aria-live', 'polite'); map.getContainer().parentElement.append(banner);
     let characters = [], revision = 0, loaded = false, writable = false, loading = false, saving = false, dragging = false, placing = false, selectedId = null, draft = null, error = '';
     let formations = [], formationManager = null, activeDrag = null;
+    let deferredRefresh = false, refreshTimer = null, composing = false;
     const memberships = new Map();
     const formationOf = id => memberships.get(id);
     const formationEditing = () => !!formationManager?.isEditing();
@@ -264,6 +265,20 @@
       if (currentName() && !unchanged && !event?.isComposing) biographyTimer = setTimeout(lookupBiography, 800);
     }
     const locked = () => loading || saving || dragging;
+    const autoRefreshSafe = () => !locked() && !draft && !placing && !formationEditing() && !mapSelecting() && !composing && !isTerritoryDrawing();
+    function scheduleRefresh() {
+      if (!deferredRefresh || refreshTimer !== null || !autoRefreshSafe()) return;
+      // Wait for cancellation/save handlers and IME events to finish, then recheck.
+      refreshTimer = setTimeout(() => {
+        refreshTimer = null;
+        if (deferredRefresh && autoRefreshSafe()) load();
+      }, 0);
+    }
+    function autoRefresh() {
+      if (!http) return;
+      deferredRefresh = true;
+      scheduleRefresh();
+    }
     function message(value, failure = false) {
       error = failure ? value : ''; $('character-status').textContent = value; $('character-status').classList.toggle('territory-error', failure);
       banner.textContent = value; banner.hidden = !value; banner.classList.toggle('territory-error', failure);
@@ -282,6 +297,7 @@
       formationManager?.render();
       syncSelection();
       renderSharedSearch(); renderDuplicateNotice();
+      scheduleRefresh();
     }
     function openPanel() {
       $('character-panel').hidden = false; $('character-toggle').setAttribute('aria-expanded', 'true'); document.body.classList.remove('sidebar-hidden'); $('toggle-sidebar').setAttribute('aria-expanded', 'true'); $('toggle-sidebar').textContent = '收起侧栏'; map.invalidateSize({ pan: false });
@@ -425,7 +441,7 @@
       } finally { clearTimeout(timer); }
     }
     async function load() {
-      if (!http || locked()) return; loading = true; controls(); const previous = revision;
+      if (!http || locked()) return; deferredRefresh = false; loading = true; controls(); const previous = revision;
       try { accept(await request()); message(draft ? `${window.AtlasUI.text("共享人物已刷新")}${previous !== revision ? window.AtlasUI.text('，远端版本已改变') : ''}；你的未保存草稿和位置已保留，保存时会核对原版本。` : window.AtlasUI.text('共享人物已同步。')); }
       catch (failure) { writable = false; message(`${failure.message} 已显示人物保留；请刷新重试。`, true); }
       finally { loading = false; controls(); }
@@ -484,6 +500,10 @@
     $('character-search').addEventListener('search', renderSharedSearch);
     $('character-search-clear').addEventListener('click', () => { $('character-search').value = ''; renderSharedSearch(); $('character-search').focus(); });
     $('character-name').addEventListener('input', nameChanged); $('character-name').addEventListener('compositionend', nameChanged);
+    for (const id of ['character-form', 'formation-form']) {
+      $(id).addEventListener('compositionstart', () => { composing = true; });
+      $(id).addEventListener('compositionend', () => { composing = false; scheduleRefresh(); });
+    }
     $('character-biography-retry').addEventListener('click', lookupBiography);
     $('character-biography-custom').addEventListener('click', () => useCustom());
     $('character-biography').addEventListener('input', () => useCustom(true));
@@ -521,7 +541,7 @@
       return { hiddenCount: characters.reduce((count, character) => count + Number(!!character.hidden), 0), visibleMarkerCount: markers.size, visibleFormationCount: visibleFormationIds.length, visibleIndividualCount: visibleIndividualIds.length, visibleFormationIds, visibleIndividualIds, visibleMarkerIds: [...markers.keys()], formationSelection: selectionState(), formationEditing: formationEditing(), formations: formations.map(formation => ({ ...formation, memberIds: [...formation.memberIds], members: formation.memberIds.map(id => { const member = characters.find(item => item.id === id), position = markers.get(id)?.getLatLng(); return { id, name: member.name, role: member.role, polityId: member.polityId, hidden: !!member.hidden, isCommander: id === formation.commanderId, lon: member.lon, lat: member.lat, markerVisible: markers.has(id), markerLon: position?.lng ?? member.lon, markerLat: position?.lat ?? member.lat }; }) })) };
     }
     window.addEventListener('focus', loadGenealogies); loadGenealogies();
-    window.addEventListener('focus', load); $('character-offline').hidden = http; render(); if (http) load(); else message(window.AtlasUI.text('文件模式不读取或写入共享人物，请通过局域网地址打开。'));
-    return { getState: () => ({ ...formationState(), loaded, writable, count: characters.length, revision, loading, placing, dragging, saving, selectedId, draftId: draft ? draft.id || 'new' : null, draftRevision: draft?.revision ?? null, biographyMode: draft?.biographyMode ?? null, biographyOrigin: draft?.biographyOrigin ?? null, biographyLoading, biographyCandidateCount: biographyCandidates.length, biographyId, biographyName, biographyReady: biographyReady(), biographyStatus: $('character-biography-status').textContent, draftName: draft ? currentName() : null, draftPosition: draft ? { lon: draft.lon, lat: draft.lat } : null, previewVisible: preview.getLayers().length > 0, layerVisible: map.hasLayer(layer), error, year: getYear(), positions: characters.map(character => ({ id: character.id, name: character.name, hidden: !!character.hidden, lon: character.lon, lat: character.lat, role: character.role, polityId: character.polityId, formationId: formationOf(character.id)?.id ?? null, isCommander: formationOf(character.id)?.commanderId === character.id, biography: character.biography, biographyOrigin: originOf(character), biographySource: originOf(character) === 'online' ? character.biographySource || null : null, color: palette.get(character.polityId).color })) }) };
+    window.addEventListener('focus', autoRefresh); $('character-offline').hidden = http; render(); if (http) load(); else message(window.AtlasUI.text('文件模式不读取或写入共享人物，请通过局域网地址打开。'));
+    return { getState: () => ({ ...formationState(), loaded, writable, count: characters.length, revision, loading, deferredRefresh, placing, dragging, saving, selectedId, draftId: draft ? draft.id || 'new' : null, draftRevision: draft?.revision ?? null, biographyMode: draft?.biographyMode ?? null, biographyOrigin: draft?.biographyOrigin ?? null, biographyLoading, biographyCandidateCount: biographyCandidates.length, biographyId, biographyName, biographyReady: biographyReady(), biographyStatus: $('character-biography-status').textContent, draftName: draft ? currentName() : null, draftPosition: draft ? { lon: draft.lon, lat: draft.lat } : null, previewVisible: preview.getLayers().length > 0, layerVisible: map.hasLayer(layer), error, year: getYear(), positions: characters.map(character => ({ id: character.id, name: character.name, hidden: !!character.hidden, lon: character.lon, lat: character.lat, role: character.role, polityId: character.polityId, formationId: formationOf(character.id)?.id ?? null, isCommander: formationOf(character.id)?.commanderId === character.id, biography: character.biography, biographyOrigin: originOf(character), biographySource: originOf(character) === 'online' ? character.biographySource || null : null, color: palette.get(character.polityId).color })) }) };
   };
 })();
